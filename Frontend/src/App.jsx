@@ -34,13 +34,19 @@
 
 // export default App
 
-
-
-import Dashboard from './pages/Dashboard.jsx'
 //import './App.css'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Dashboard from './pages/Dashboard.jsx';
+import ResumeAnalyzer from './pages/ResumeAnalyzer.jsx';
 
 function App() {
-  return <Dashboard />
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
-
 export default App
