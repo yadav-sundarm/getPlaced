@@ -38,6 +38,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from './pages/Dashboard.jsx';
 import ResumeAnalyzer from './pages/ResumeAnalyzer.jsx';
+import GroupDiscussion from "./pages/GroupDiscussion.jsx";
+import VideoMeet from "./pages/VideoMeet.jsx";
 
 function App() {
   return (
@@ -45,6 +47,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
+        <Route path="/group-discussion" element={<GroupDiscussion />}></Route>
+        <Route path="/meet/:url" element={<VideoMeet />}></Route>
       </Routes>
     </BrowserRouter>
   );
