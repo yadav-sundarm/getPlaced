@@ -29,7 +29,7 @@ const menuItems = [
     { text: 'Dashboard', icon: HomeIcon, path: '/' },
     { text: 'Mock Interviews', icon: TargetIcon, path: '/mock-interviews' },
     { text: 'DSA Practice', icon: CodeIcon, path: '/dsa-practice' },
-    { text: 'Resume', icon: DescriptionIcon, path: '/resume' },
+    { text: 'Resume', icon: DescriptionIcon, path: '/resume-analyzer' },
     { text: 'Group Discussion', icon: GroupIcon, path: '/group-discussion' },
 ];
 
