@@ -16,7 +16,7 @@ import TestLists from "./components/common/TestLists.jsx";
 import Test from "./pages/Test.jsx";
 import MockInterviewSetup from "./pages/MockInterviewSetup.jsx";
 import MockInterview from "./pages/MockInterview";
-
+import ExperienceShare from "./pages/ExperienceShare.jsx";
 
 const theme = createTheme({
   palette: {
@@ -71,6 +71,7 @@ function App() {
               element={<MockInterviewSetup />}
             />
             <Route path="/interview" element={<MockInterview />} />
+        <Route path="/share-experience" element={<ExperienceShare />} />
 
             <Route path="aptitude-questions" element={<AptitudePractice />} />
             <Route
