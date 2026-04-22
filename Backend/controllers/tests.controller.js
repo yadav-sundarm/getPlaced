@@ -4,11 +4,7 @@ import questionsModel from "../models/questions.model.js"
 import customApiResponse from "../utils/customApiResponse.js"
 
 const getAllQuestions = async (req, res) => {
-    // const user = req.user
-
-    // if(!user) {
-    //     throw new CustomApiError("User not found !!", 404)
-    // }
+    
 
     const allQuestions = await questionsModel.find().select("-correctAnswer")
 
@@ -19,12 +15,7 @@ const getAllQuestions = async (req, res) => {
 }
 
 const getMathQuestions = asyncHandler(async (req, res) => {
-    // const user = req.user
-
-    // if(!user) {
-    //     throw new CustomApiError("User not found !!", 404)
-    // }
-
+    
     const allQuestions = await questionsModel.find({ category: "math" }).select("-correctAnswer")
 
 
@@ -34,11 +25,7 @@ const getMathQuestions = asyncHandler(async (req, res) => {
 })
 
 const getLogicalQuestions = async (req, res) => {
-    // const user = req.user
-
-    // if(!user) {
-    //     throw new CustomApiError("User not found !!", 404)
-    // }
+    
 
     const allQuestions = await questionsModel.find({ category: "logical" }).select("-correctAnswer")
 
@@ -49,12 +36,7 @@ const getLogicalQuestions = async (req, res) => {
 }
 
 const getComputerQuestions = async (req, res) => {
-    // const user = req.user
-
-    // if(!user) {
-    //     throw new CustomApiError("User not found !!", 404)
-    // }
-
+  
     const allQuestions = await questionsModel.find({ category: "computer" }).select("-correctAnswer")
 
 
@@ -64,29 +46,47 @@ const getComputerQuestions = async (req, res) => {
 }
 
 
-const submitTest = async (req, res) => {
-    const { answers } = req.body;
+
+const TEST_DURATION = 20 * 60 * 1000; // 20 mins
+
+const submitTest = asyncHandler(async (req, res) => {
+    const { answers, startTime } = req.body;
+
+    if (!startTime) {
+        throw new customApiError(400, "Test start time missing");
+    }
+
+    const now = Date.now();
+    const endTime = parseInt(startTime) + TEST_DURATION;
+
+    if (now > endTime) {
+        throw new customApiError(403, "Time is over! Test expired.");
+    }
 
     let score = 0;
 
-    for (const questionId in answers) {
-        const userAnswer = answers[questionId];
+    const questionIds = Object.keys(answers);
 
-        const question = await questionsModel.findById(questionId);
+    // 🔥 Optimized DB query (IMPORTANT)
+    const questions = await questionsModel.find({
+        _id: { $in: questionIds },
+    });
 
+    const questionMap = {};
+    questions.forEach((q) => {
+        questionMap[q._id] = q;
+    });
 
-        if (!question) continue;
-
-        if (userAnswer === question.correctAnswer) {
-            score += 1;
+    for (const qid of questionIds) {
+        if (answers[qid] === questionMap[qid]?.correctAnswer) {
+            score++;
         }
     }
 
-
     return res.status(200).json(
-        new customApiResponse("Successfully assigned the scores", 200, { score })
-    )
-}
+        new customApiResponse("Test evaluated successfully", 200, { score })
+    );
+});
 
 
 export {
