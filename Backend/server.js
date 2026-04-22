@@ -42,6 +42,7 @@ app.use("/dsa", dsaRouter);
 app.use("/api/companies", companiesRoutes);
 app.use("/api/interview", interviewEvaluationRoutes);
 
+app.use("/api/users", userRoutes);
 /* ---------- server + socket ---------- */
 const server = createServer(app);
 connectToServer(server);
