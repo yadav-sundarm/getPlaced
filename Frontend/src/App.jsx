@@ -17,7 +17,7 @@ import Test from "./pages/Test.jsx";
 import MockInterviewSetup from "./pages/MockInterviewSetup.jsx";
 import MockInterview from "./pages/MockInterview";
 import ExperienceShare from "./pages/ExperienceShare.jsx";
-
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 import DsaQuestionsList from "./components/common/DsaQuestionsList.jsx"
 import DsaPlayGround from "./components/common/DsaPlayGround.jsx";
@@ -71,7 +71,13 @@ function App() {
           <Route path="/" element={<LoginSignup />} />
 
           {/* 🔒 App Routes */}
-          <Route element={<Layout />}>
+          <Route
+            element={
+              <ProtectedRoute>
+                <Layout />
+              </ProtectedRoute>
+            }
+          >
             <Route path="/dashboard" element={<Dashboard />} />
 
             <Route path="/mock-interviews" element={<Company />} />
@@ -90,7 +96,7 @@ function App() {
             />
 
             <Route path="dsa-practice" element={<DSAPractice />} />
-            <Route path="dsa-practise/:topic" element={<DsaQuestionsList />}/>
+            <Route path="dsa-practise/:topic" element={<DsaQuestionsList />} />
             <Route path="dsa-practise/:topic/:questionId" element={<DsaPlayGround />} />
             <Route path="resume-analyzer" element={<ResumeAnalyzer />} />
             <Route path="group-discussion" element={<GroupDiscussion />} />

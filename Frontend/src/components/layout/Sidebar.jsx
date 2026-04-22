@@ -27,10 +27,10 @@ import {
 const drawerWidth = '20%';
 
 const menuItems = [
-    { text: 'Dashboard', icon: HomeIcon, path: '/' },
+    { text: 'Dashboard', icon: HomeIcon, path: '/dashboard' },
     { text: 'Mock Interviews', icon: TargetIcon, path: '/mock-interviews' },
     { text: 'DSA Practice', icon: CodeIcon, path: '/dsa-practice' },
-    { text: 'Practise Aptitude', icon: CalculateIcon, path: '/aptitude-questions'},
+    { text: 'Practise Aptitude', icon: CalculateIcon, path: '/aptitude-questions' },
     { text: 'Resume', icon: DescriptionIcon, path: '/resume-analyzer' },
     { text: 'Group Discussion', icon: GroupIcon, path: '/group-discussion' },
 ];
