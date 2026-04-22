@@ -1,18 +1,25 @@
-import bcrypt from "bcrypt"
-import CustomApiError from "./customApiError"
+import bcrypt from "bcrypt";
+import CustomApiError from "./customApiError.js";
 
-const hashPassword = async (userPassword) =>{
+/* =========================
+   HASH PASSWORD
+========================= */
+export const hashPassword = async (userPassword) => {
+  if (!userPassword) {
+    throw new CustomApiError("Password is required", 400);
+  }
 
-    if (!userPassword){
-        throw new CustomApiError("Couldn't get the user password to hash it !!", 404)
-    }
+  const salt = await bcrypt.genSalt(10);
+  return await bcrypt.hash(userPassword, salt);
+};
 
-    const salt = await bcrypt.genSalt(10)
+/* =========================
+   COMPARE PASSWORD
+========================= */
+export const comparePassword = async (plainPassword, hashedPassword) => {
+  if (!plainPassword || !hashedPassword) {
+    throw new CustomApiError("Password comparison failed", 400);
+  }
 
-    const hashedPassword = await bcrypt.hash(userPassword, salt)
-
-    return hashedPassword
-}
-
-
-export default hashPassword
+  return await bcrypt.compare(plainPassword, hashedPassword);
+};
