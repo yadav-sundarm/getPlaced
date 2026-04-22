@@ -3,7 +3,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
 import Layout from "./components/layout/Layout.jsx";
-
+import LoginSignup from "./pages/LoginSignup";
 import Dashboard from "./pages/Dashboard";
 import DSAPractice from "./pages/DSAPractice";
 import ResumeAnalyzer from "./pages/ResumeAnalyzer";
@@ -63,21 +63,23 @@ function App() {
       <CssBaseline />
       <BrowserRouter>
         <Routes>
+          {/* 🔓 Public Route */}
+          <Route path="/" element={<LoginSignup />} />
+
+          {/* 🔒 App Routes */}
           <Route element={<Layout />}>
-            <Route index element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+
             <Route path="/mock-interviews" element={<Company />} />
             <Route
               path="/mock-interview/:companyName"
               element={<MockInterviewSetup />}
             />
             <Route path="/interview" element={<MockInterview />} />
-        <Route path="/share-experience" element={<ExperienceShare />} />
+            <Route path="/share-experience" element={<ExperienceShare />} />
 
             <Route path="aptitude-questions" element={<AptitudePractice />} />
-            <Route
-              path="/aptitude-questions/:category"
-              element={<TestLists />}
-            />
+            <Route path="/aptitude-questions/:category" element={<TestLists />} />
             <Route
               path="/aptitude-questions/:category/test/:testName"
               element={<Test />}
@@ -88,7 +90,6 @@ function App() {
             <Route path="group-discussion" element={<GroupDiscussion />} />
 
             <Route path="meet/:url" element={<VideoMeet />} />
-
             <Route path="settings" element={<SettingsPage />} />
           </Route>
         </Routes>

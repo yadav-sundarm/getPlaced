@@ -10,6 +10,7 @@ import seedQuestionsInDatabase from "./utils/seedQuestions.js";
 import questionsModel from "./models/questions.model.js";
 import companiesRoutes from "./routes/mockInterview.routes.js";
 import interviewEvaluationRoutes from "./routes/interviewEvaluation.routes.js";
+import userRoutes from "./routes/user.routes.js";
 dotenv.config();
 
 const app = express();
@@ -30,6 +31,7 @@ app.use("/api/resume", resumeRoutes);
 app.use("/aptitude-questions", TestRouter);
 app.use("/api/companies", companiesRoutes);
 app.use("/api/interview", interviewEvaluationRoutes);
+app.use("/api/users", userRoutes);
 
 /* ---------- server + socket ---------- */
 const server = createServer(app);

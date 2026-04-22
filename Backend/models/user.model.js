@@ -1,32 +1,81 @@
-import mongoose,{Schema} from "mongoose"
+import mongoose, { Schema } from "mongoose";
 
+const userSchema = new Schema(
+  {
+    // ---- BASIC IDENTITY ----
+    username: {
+      type: String,
+      required: true,
+      trim: true,
+    },
 
-const userModel = new Schema({
-    username:{
-        type:String,
-        required:true,
+    firstName: {
+      type: String,
+      required: true,
+      trim: true,
     },
-    password:{
-        type:String,
-        required:true,
-        select: false,
+
+    lastName: {
+      type: String,
+      required: true,
+      trim: true,
     },
-    email:{
-        type:String,
-        required:true,
-        unique:true,
+
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
     },
-    testsAttempted:[{
+
+    password: {
+      type: String,
+      required: true,
+      select: false,
+    },
+
+    // ---- COLLEGE-SPECIFIC ----
+    batchYear: {
+      type: Number,
+      required: true,
+    },
+
+    department: {
+      type: String,
+      required: true,
+      enum: ["CSE", "IT", "AIML", "DS", "EXTC", "MECH", "MCA"],
+    },
+
+    role: {
+      type: String,
+      enum: ["student", "admin"],
+      default: "student",
+    },
+
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+
+    // ---- PLATFORM ACTIVITY ----
+    testsAttempted: [
+      {
         type: mongoose.Schema.Types.ObjectId,
         ref: "TestsModel",
-    }],
-    meetingsAttended:[{
+      },
+    ],
+
+    meetingsAttended: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "MeetingModel",
-    }]
-}, {
-    timestamps:true
-})
+        ref: "Meeting",
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  },
+);
 
-
-export default mongoose.model("UserModel", userModel)
+export default mongoose.model("User", userSchema);

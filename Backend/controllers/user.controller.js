@@ -1,87 +1,125 @@
-import userModel from "../models/user.model.js";
+import User from "../models/user.model.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import CustomApiError from "../utils/customApiError.js";
 import CustomApiResponse from "../utils/customApiResponse.js";
-import hashPassword from "../utils/hashPassword.js";
+import { hashPassword, comparePassword } from "../utils/hashPassword.js";
+import generateToken from "../utils/jwt.js";
 
-const loginUser = asyncHandler(async (req, res)=>{
-    const email = req.body.email
+/* =========================
+   SIGNUP
+========================= */
+const createUser = asyncHandler(async (req, res) => {
+  const { firstName, lastName, email, password, batchYear, department } =
+    req.body;
 
-    const password = req.body.password
+  if (
+    !firstName ||
+    !lastName ||
+    !email ||
+    !password ||
+    !batchYear ||
+    !department
+  ) {
+    throw new CustomApiError("All fields are required", 400);
+  }
 
-    if(!email && !password){
-        throw new CustomApiError("Email and password both are required !!", 404)
-    }
+  // ✅ Email validation
+  const emailRegex = /^[a-zA-Z0-9._]+@ves\.ac\.in$/;
+  if (!emailRegex.test(email)) {
+    throw new CustomApiError("Invalid institute email", 400);
+  }
 
-    const alreadyExistingUser = await userModel.find({email:email})
+  // ✅ Check existing user
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    throw new CustomApiError("User already exists, please login", 409);
+  }
 
-    if (!alreadyExistingUser){
-        throw new CutomApiError("User not found, Please register !!", 404)
-    }
+  // ✅ Generate username from email
+  const parts = email.split(".");
+  const username = `${parts[1]}.${parts[2].split("@")[0]}`;
 
-    const samePasswordCheck = await bcrypt.compare(password, alreadyExistingUser?.password)
+  // ✅ Hash password
+  const hashedPassword = await hashPassword(password);
 
-    if (!samePasswordCheck){
-        throw new CustomApiError("The password is not same !!", 300)
-    }
+  const newUser = await User.create({
+    username,
+    firstName,
+    lastName,
+    email,
+    password: hashedPassword,
+    batchYear,
+    department,
+  });
 
-    return new CustomApiResponse("User Logged In successfully !!", 200, alreadyExistingUser)
-})
+  // ✅ Generate JWT
+  const token = generateToken({
+    userId: newUser._id,
+    role: newUser.role,
+  });
 
+  return res.status(201).json(
+    new CustomApiResponse("User registered successfully", 201, {
+      token,
+      user: {
+        id: newUser._id,
+        firstName: newUser.firstName,
+        email: newUser.email,
+        role: newUser.role,
+        course: newUser.department,
+      },
+    }),
+  );
+});
 
-const createUser = asyncHandler(async (req, res) =>{
-    const username = req.body.name
+/* =========================
+   LOGIN
+========================= */
+const loginUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
 
-    const password = req.body.password
+  if (!email || !password) {
+    throw new CustomApiError("Email and password are required", 400);
+  }
 
-    const email = req.body.email
+  const user = await User.findOne({ email }).select("+password");
 
-    if (!username && !password && !email){
-        throw new CustomApiError("All feilds are mandatory to enter", 404)
-    }
+  if (!user) {
+    throw new CustomApiError("User not found, please register", 404);
+  }
 
-    const emailRegex = "/^[a-zA-Z0-9._]+@ves\.ac\.in$/"
+  const isPasswordCorrect = await comparePassword(password, user.password);
 
-    if(!emailRegex.test(email)){
-        throw new CustomApiError("Mail does not match institution mail pattern", 349)
-    }
+  if (!isPasswordCorrect) {
+    throw new CustomApiError("Invalid credentials", 401);
+  }
 
-    const hashedPassword = await hashPassword(password)
+  const token = generateToken({
+    userId: user._id,
+    role: user.role,
+  });
 
-    if(!hashedPassword){
-        throw new CustomApiError("Couldn't find the hashed password !!", 404)
-    }
+  return res.status(200).json(
+    new CustomApiResponse("User logged in successfully", 200, {
+      token,
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        email: user.email,
+        role: user.role,
+        course: user.department,
+      },
+    }),
+  );
+});
 
-    const alreadyUser = await userModel.find({email:email})
+/* =========================
+   LOGOUT
+========================= */
+const logoutUser = asyncHandler(async (req, res) => {
+  return res
+    .status(200)
+    .json(new CustomApiResponse("User logged out successfully", 200));
+});
 
-    if(alreadyUser){
-        throw new CustomApiError("User already exists, Please Login !!", 300)
-    }
-
-    const user = {
-        username: username,
-        password: hashedPassword,
-        email: email,
-    }
-    try {
-        const newUser = await userModel.create(user)
-        console.log("Created a user successfully !!")
-
-        return new CustomApiError("Created user successfully", 200, newUser)
-
-    } catch (error) {
-        throw new CustomApiError("Error while creaqting creating a user !!", 500)
-    }
-
-
-})
-
-
-const logoutUser = asyncHandler((req, res) =>{})
-
-
-export {
-    loginUser,
-    createUser,
-    logoutUser,
-}
+export { createUser, loginUser, logoutUser };
