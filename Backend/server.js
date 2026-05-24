@@ -1,30 +1,5 @@
 import express from "express";
 import dotenv from "dotenv";
-<<<<<<< HEAD
-import mongoose from "mongoose";
-import cors from "cors";
-import {createServer} from "node:http";
-import {Server}  from "socket.io";
-
-dotenv.config();
-const app = express();
-
-const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log("MongoDB Atlas connected");
-  } catch (error) {
-    console.error("MongoDB connection failed", error);
-  }
-};
-
-connectDB();
-
-app.use(cors());
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-=======
 import cors from "cors";
 import { createServer } from "http";
 import { connectToServer } from "./controllers/socketManager.js";
@@ -34,7 +9,7 @@ import TestRouter from "./routes/tests.routes.js";
 import seedQuestionsInDatabase from "./utils/seedQuestions.js";
 import questionsModel from "./models/questions.model.js";
 import companiesRoutes from "./routes/mockInterview.routes.js";
-import interviewEvaluationRoutes from "./routes/interviewEvaluation.routes.js";
+
 dotenv.config();
 
 const app = express();
@@ -54,7 +29,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/resume", resumeRoutes);
 app.use("/aptitude-questions", TestRouter);
 app.use("/api/companies", companiesRoutes);
-app.use("/api/interview", interviewEvaluationRoutes);
 
 /* ---------- server + socket ---------- */
 const server = createServer(app);
@@ -83,4 +57,3 @@ const startServer = async () => {
 };
 
 startServer();
->>>>>>> da345dad347d4bde3361433395c0eabfc5f76761
