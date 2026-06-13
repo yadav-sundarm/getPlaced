@@ -227,7 +227,7 @@ const DsaPlayground = () => {
                 height="90%"
                 defaultLanguage="python"
                 theme="vs-dark"
-                defaultValue="Select a language to code in..."
+                defaultValue="## Select a language to code in..."
                 sx={{ borderRadius: 0.5 }}
                 value={code}
                 onChange={(value) => setCode(value)}
