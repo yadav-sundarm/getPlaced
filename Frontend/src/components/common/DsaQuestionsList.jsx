@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // MUI
 import {
@@ -16,6 +17,7 @@ const DsaQuestionsList = () => {
   const { topic } = useParams();
   const [page, setPage] = useState(1);
   const questionsPerPage = 5;
+  const navigate = useNavigate();
 
 
   const fetchQuestions = async () => {
@@ -38,8 +40,7 @@ const DsaQuestionsList = () => {
   const indexOfFirst = indexOfLast - questionsPerPage;
   const currentQuestions = questions.slice(indexOfFirst, indexOfLast);
 
-  console.log(questions)
-  console.log(currentQuestions)
+
 
   const handlePageChange = (e, value) => {
     setPage(value);
@@ -58,6 +59,11 @@ const DsaQuestionsList = () => {
         return "default";
     }
   };
+
+
+  const handleQuestionClick = (questionId) =>{
+    navigate(`/dsa-practise/${topic}/${questionId}`)
+  }
 
   return (
     <Box
@@ -105,27 +111,34 @@ const DsaQuestionsList = () => {
                   },
                 }}
               >
-                {/* Left: Difficulty */}
-                <Chip
-                  label={q.difficultyLevel}
-                  color={getDifficultyColor(q.difficultyLevel)}
-                  variant="outlined"
-                />
 
-                {/* Middle: Question */}
-                <Typography sx={{ flex: 1, textAlign: "center" }}>
+                <Typography sx={{ flex: 1, textAlign: "left", marginLeft: 1, }}>
                   {q.title}
                 </Typography>
 
-                {/* Right: Status */}
+
+
                 <Typography
                   sx={{
                     color: q.solved ? "#4caf50" : "#ff5252",
                     fontWeight: "bold",
+                    marginRight: 1,
                   }}
                 >
                   {q.solved ? "Solved" : "Not Solved"}
                 </Typography>
+
+
+
+                <Chip
+                  label={q.difficultyLevel}
+                  color={getDifficultyColor(q.difficultyLevel)}
+                  variant="outlined"
+                  sx={{marginRight: 1}}
+                />
+
+
+                
               </Box>
             ))}
           </Box>
