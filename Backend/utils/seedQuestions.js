@@ -99,6 +99,8 @@ const seedAptitudeQuestionsInDatabase = async() =>{
 const seedDSAQuestionsInDatabase = async () =>{
     const dsaQuestions = await extractDSAQuestions()
 
+    console.log(dsaQuestions)
+
     try {
         await DsaQuestionModel.insertMany(dsaQuestions)
         console.log("Data extracted and stored in database successfullyy")

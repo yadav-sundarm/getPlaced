@@ -39,10 +39,7 @@ const dsaQuestionSchema = new Schema(
     examples: [
       {
         exampleNumber: Number,
-        input: String,
-        output: String,
-        explanation: String,
-        images: [String],
+        exampleText: String,
       },
     ],
 
