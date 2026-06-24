@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+dotenv.config();
 import cors from "cors";
 import { createServer } from "http";
 import { connectToServer } from "./controllers/socketManager.js";
@@ -11,14 +12,13 @@ import {
   seedDSAQuestionsInDatabase,
 } from "./utils/seedQuestions.js";
 import questionsModel from "./models/questions.model.js";
-
 import DSAQuestion from "./models/dsaQuestion.model.js";
 import dsaRouter from "./routes/dsa.routes.js";
-
 import companiesRoutes from "./routes/mockInterview.routes.js";
 import interviewEvaluationRoutes from "./routes/interviewEvaluation.routes.js";
 import userRoutes from "./routes/user.routes.js";
-dotenv.config();
+import adminRoutes from "./routes/admin.routes.js";
+import experienceRoutes from "./routes/experience.routes.js";
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -26,7 +26,7 @@ const PORT = process.env.PORT || 8000;
 /* ---------- middlewares ---------- */
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true,
   }),
 );
@@ -36,13 +36,23 @@ app.use(express.urlencoded({ extended: true }));
 /* ---------- routes ---------- */
 app.use("/api/resume", resumeRoutes);
 app.use("/aptitude-questions", TestRouter);
-
 app.use("/dsa", dsaRouter);
-
 app.use("/api/companies", companiesRoutes);
 app.use("/api/interview", interviewEvaluationRoutes);
-
 app.use("/api/users", userRoutes);
+app.use("/api/admin", adminRoutes); // admin-only routes
+app.use("/api/experience", experienceRoutes); // student experience submission
+
+/* ---------- global error handler ---------- */
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  res.status(statusCode).json({
+    success: false,
+    message: err.message || "Internal Server Error",
+    errors: err.errors || [],
+  });
+});
+
 /* ---------- server + socket ---------- */
 const server = createServer(app);
 connectToServer(server);
@@ -62,7 +72,7 @@ const startServer = async () => {
 
     const DsaQuestionCount = await DSAQuestion.countDocuments();
     if (DsaQuestionCount === 0) {
-      console.log("Extarcting DSA Questions");
+      console.log("Extracting DSA Questions");
       await seedDSAQuestionsInDatabase();
       console.log("DSA Questions extracted and saved successfully");
     }

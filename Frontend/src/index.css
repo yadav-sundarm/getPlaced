@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #f9fafb;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,13 +13,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Hide scrollbar for ALL elements */
+/* Hide scrollbar visually but keep scroll functional */
 *::-webkit-scrollbar {
-  display: none;
-}
-
-* {
-  scrollbar-width: none;
+  width: 0px;
+  height: 0px;
+  background: transparent;
 }
 
 a {
@@ -41,7 +39,10 @@ html,
 body,
 #root {
   height: auto;
+  min-height: 100vh;
   overflow-y: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 h1 {
