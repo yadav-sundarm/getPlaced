@@ -1,14 +1,11 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 import { GoogleGenAI } from "@google/genai";
-
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_RESUME_ANALYZER_API_KEY,
-});
 
 export async function analyzeResumeWithGemini(resumeText) {
   try {
+    // Instantiate inside function so env var is always read fresh
+    const ai = new GoogleGenAI({
+      apiKey: process.env.GEMINI_RESUME_ANALYZER_API_KEY,
+    });
     const prompt = `
 You are an expert ATS (Applicant Tracking System) resume evaluator.
 
@@ -55,7 +52,7 @@ ${resumeText.slice(0, 5000)}
 `;
 
     const result = await ai.models.generateContent({
-      model: "gemini-2.5-flash-lite",
+      model: "gemini-2.5-flash",
       contents: [
         {
           role: "user",

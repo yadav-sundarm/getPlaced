@@ -33,6 +33,7 @@ const menuItems = [
     { text: 'Practise Aptitude', icon: CalculateIcon, path: '/aptitude-questions' },
     { text: 'Resume', icon: DescriptionIcon, path: '/resume-analyzer' },
     { text: 'Group Discussion', icon: GroupIcon, path: '/group-discussion' },
+    { text: 'Experience Share', icon: TrophyIcon, path: '/share-experience' },
 ];
 
 const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {

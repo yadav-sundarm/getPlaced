@@ -1,7 +1,7 @@
 // resume.controller.js
 import fs from "fs";
 import { parseResume } from "../services/resumeparser.service.js";
-import { analyzeResumeWithGemini } from "../utils/resumeAnalyzerGemini.js";
+import { analyzeResumeWithGemini } from "../services/resumeAnalyzerGemini.js";
 
 export const analyzeResume = async (req, res) => {
   try {
@@ -19,6 +19,9 @@ export const analyzeResume = async (req, res) => {
       suggestions: analysis.suggestions,
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error("[Resume Analyze] Error:", err.message);
+    res
+      .status(500)
+      .json({ message: "Resume analysis failed. Please try again." });
   }
 };

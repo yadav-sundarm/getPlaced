@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import {
     Box,
     Button,
@@ -299,6 +300,27 @@ export default function LoginSignup() {
                                 </form>
                             </CardContent>
                         </Card>
+
+                        {/* Admin portal link */}
+                        <Box
+                            onClick={() => navigate("/admin/login")}
+                            sx={{
+                                mt: 2,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: 0.8,
+                                cursor: "pointer",
+                                opacity: 0.45,
+                                transition: "opacity 0.2s",
+                                "&:hover": { opacity: 1 },
+                            }}
+                        >
+                            <AdminPanelSettingsIcon sx={{ fontSize: 15, color: "#6b7280" }} />
+                            <Typography fontSize="0.78rem" color="#6b7280">
+                                Admin Portal
+                            </Typography>
+                        </Box>
                     </Box>
                 </Stack>
             </Container>
