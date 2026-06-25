@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, { decode } from "jsonwebtoken";
 import CustomApiError from "../utils/customApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import User from "../models/user.model.js";
@@ -16,16 +16,23 @@ export const verifyJWT = asyncHandler(async (req, res, next) => {
   const token = authHeader.split(" ")[1];
 
   let decoded;
+  let user;
   try {
     decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("from jwt verify", decoded);
+
+    user = await User.findById(decoded.userId).select("-password");
+    console.log("from jwt user", user);
+
+    if (!user) {
+      throw new CustomApiError("Unauthorised – user not found", 401);
+    }
+
+
   } catch (err) {
     throw new CustomApiError("Unauthorised – invalid or expired token", 401);
   }
 
-  const user = await User.findById(decoded.userId).select("-password");
-  if (!user) {
-    throw new CustomApiError("Unauthorised – user not found", 401);
-  }
 
   req.user = user;
   next();
