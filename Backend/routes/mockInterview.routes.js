@@ -15,5 +15,4 @@ router.get("/", getAllMockInterviewCompanies);
 router.post("/start", startMockInterview);
 
 router.post("/evaluate", upload.any(), evaluateMockInterviewController);
-
 export default router;

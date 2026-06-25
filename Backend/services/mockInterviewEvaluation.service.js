@@ -293,24 +293,29 @@ OUTPUT FORMAT:
     // =====================================
     // GEMINI CALL
     // =====================================
-    const result = await ai.models.generateContent({
+    // =====================================
+    // GEMINI CALL WITH RETRY
+    // =====================================
+    const generateWithRetry = async (params, retries = 3, delay = 3000) => {
+      for (let i = 0; i < retries; i++) {
+        try {
+          return await ai.models.generateContent(params);
+        } catch (err) {
+          if (err.status === 503 && i < retries - 1) {
+            console.log(
+              `Gemini 503, retrying in ${delay}ms... (${i + 1}/${retries})`,
+            );
+            await new Promise((res) => setTimeout(res, delay));
+          } else {
+            throw err;
+          }
+        }
+      }
+    };
+    const result = await generateWithRetry({
       model: "gemini-2.5-flash",
-
-      config: {
-        responseMimeType: "application/json",
-      },
-
-      contents: [
-        {
-          role: "user",
-
-          parts: [
-            {
-              text: prompt,
-            },
-          ],
-        },
-      ],
+      config: { responseMimeType: "application/json" },
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
     });
 
     const cleanedText = result.text.trim();

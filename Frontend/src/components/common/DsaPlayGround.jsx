@@ -1,75 +1,69 @@
 import React from "react";
-import {
-  Box,
-  Typography,
-  Chip,
-  Paper,
-  Divider,
-  Button,
-} from "@mui/material";
+import { Box, Typography, Chip, Paper, Divider, Button } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Editor from "@monaco-editor/react";
-import {
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from "@mui/material";
-
-
+import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 
 const DsaPlayground = () => {
-
-  const [question, setQuestion] = useState({})
-  const { questionId } = useParams()
+  const [question, setQuestion] = useState({});
+  const { questionId } = useParams();
   const [language, setLanguage] = useState("python");
   const [code, setCode] = useState("");
-  const [output, setOutput] = useState("")
-  const [loading, setLoading] = useState(false)
-
+  const [output, setOutput] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const fetchQuestions = async () => {
-    const response = await axios.post(`http://localhost:8000/dsa/get-single-dsa-question/?questionId=${questionId}`)
+    const response = await axios.get(
+      `http://localhost:8000/dsa/get-single-dsa-question/?questionId=${questionId}`,
+    );
 
-    const question = await response?.data?.data?.dsaQuestion
+    const question = await response?.data?.data?.dsaQuestion;
 
-    setQuestion(question)
-  }
+    setQuestion(question);
+  };
 
   useEffect(() => {
-    fetchQuestions()
+    fetchQuestions();
 
-    if (!question) return
+    if (!question) return;
 
-    const editorCode = question?.starterCode?.find((code) => code?.language === language)
+    const editorCode = question?.starterCode?.find(
+      (code) => code?.language === language,
+    );
 
-    setCode(editorCode?.code || "")
-
-  }, [language, questionId])
-
+    setCode(editorCode?.code || "");
+  }, [language, questionId]);
 
   const runCode = async () => {
-
     try {
-      setLoading(true)
-      const response = await axios.post("http://localhost:8000/dsa/run-code", { language, code })
+      setLoading(true);
 
-      console.log(response)
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      const response = await axios.post("http://localhost:8000/dsa/run-code", {
+        language,
+        code,
+        stdin: "",
+        questionId,
+        userId: user.id,
+      });
 
-      setLoading(false)
+      console.log(response);
 
-      setOutput(response?.data?.output === "" ? "Code executed successfully with no output" : response?.data?.output)
+      setLoading(false);
 
+      setOutput(
+        response?.data?.output === ""
+          ? "Code executed successfully with no output"
+          : response?.data?.output,
+      );
     } catch (error) {
-      console.log(error)
-      setOutput("Error executing code")
-      setLoading(false)
+      console.log(error);
+      setOutput("Error executing code");
+      setLoading(false);
     }
-
-  }
-
+  };
 
   return (
     <Box
@@ -122,7 +116,6 @@ const DsaPlayground = () => {
               Examples
             </Typography>
 
-
             {question.examples?.map((example, index) => (
               <Paper
                 key={index}
@@ -136,13 +129,9 @@ const DsaPlayground = () => {
                   Example {example?.exampleNumber}
                 </Typography>
 
-                <Typography>
-                  {example?.exampleText}
-                </Typography>
-
+                <Typography>{example?.exampleText}</Typography>
               </Paper>
             ))}
-
 
             <Divider sx={{ my: 3 }} />
 
@@ -150,14 +139,11 @@ const DsaPlayground = () => {
               Hints
             </Typography>
 
-            {
-              question.hints?.map((hint, index) => (
-                <Typography key={index} sx={{ mb: 1 }}>
-                  • {hint}
-                </Typography>
-              ))
-            }
-
+            {question.hints?.map((hint, index) => (
+              <Typography key={index} sx={{ mb: 1 }}>
+                • {hint}
+              </Typography>
+            ))}
           </Paper>
 
           {/* RIGHT PANEL */}
@@ -185,43 +171,28 @@ const DsaPlayground = () => {
                   mb: 2,
                 }}
               >
-                <Typography variant="h6">
-                  Code Editor
-                </Typography>
+                <Typography variant="h6">Code Editor</Typography>
 
                 <Box>
-                  <Button
-                    variant="outlined"
-                    sx={{ mr: 1 }}
-                    onClick={runCode}
-                  >
+                  <Button variant="outlined" sx={{ mr: 1 }} onClick={runCode}>
                     Run
                   </Button>
 
-
                   <FormControl size="small">
-                <InputLabel>Language</InputLabel>
+                    <InputLabel>Language</InputLabel>
 
-                <Select
-                  value={language}
-                  label="Language"
-                  onChange={(e) => setLanguage(e.target.value)}
-                >
-                  <MenuItem value="python">Python</MenuItem>
-                  <MenuItem value="java">Java</MenuItem>
-                  <MenuItem value="javascript">JavaScript</MenuItem>
-                </Select>
-              </FormControl>
-
-
-                  
+                    <Select
+                      value={language}
+                      label="Language"
+                      onChange={(e) => setLanguage(e.target.value)}
+                    >
+                      <MenuItem value="python">Python</MenuItem>
+                      <MenuItem value="java">Java</MenuItem>
+                      <MenuItem value="javascript">JavaScript</MenuItem>
+                    </Select>
+                  </FormControl>
                 </Box>
               </Box>
-
-              
-
-
-
 
               <Editor
                 height="90%"
@@ -234,16 +205,9 @@ const DsaPlayground = () => {
               />
             </Paper>
 
-
-
-            <Typography
-                variant="h6"
-                mb={2}
-                ml={2}
-              >
-                Output
-              </Typography>
-
+            <Typography variant="h6" mb={2} ml={2}>
+              Output
+            </Typography>
 
             <Paper
               elevation={2}
@@ -254,7 +218,6 @@ const DsaPlayground = () => {
                 borderRadius: 0.5,
               }}
             >
-
               <Box
                 sx={{
                   backgroundColor: "#111",

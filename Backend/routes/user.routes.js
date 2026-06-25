@@ -4,14 +4,14 @@ import {
   loginUser,
   logoutUser,
 } from "../controllers/user.controller.js";
+import { getDashboardStats } from "../controllers/dashboardStats.controller.js"; // ADD
+import { verifyJWT } from "../middlewares/verifyUser.middleware.js";
 
 const router = express.Router();
 
-/* =========================
-   AUTH ROUTES
-========================= */
 router.post("/signup", createUser);
 router.post("/login", loginUser);
 router.post("/logout", logoutUser);
+router.get("/dashboard-stats", verifyJWT, getDashboardStats); // ADD
 
 export default router;

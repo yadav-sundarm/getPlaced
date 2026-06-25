@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
-
+console.log("JWT in server:", process.env.JWT_SECRET);
 import cors from "cors";
 import { createServer } from "http";
 import { connectToServer } from "./controllers/socketManager.js";
@@ -16,7 +16,6 @@ import questionsModel from "./models/questions.model.js";
 import DSAQuestion from "./models/dsaQuestion.model.js";
 import dsaRouter from "./routes/dsa.routes.js";
 import companiesRoutes from "./routes/mockInterview.routes.js";
-import interviewEvaluationRoutes from "./routes/interviewEvaluation.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 import experienceRoutes from "./routes/experience.routes.js";
@@ -39,7 +38,6 @@ app.use("/api/resume", resumeRoutes);
 app.use("/aptitude-questions", TestRouter);
 app.use("/dsa", dsaRouter);
 app.use("/api/companies", companiesRoutes);
-app.use("/api/interview", interviewEvaluationRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/experience", experienceRoutes);

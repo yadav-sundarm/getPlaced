@@ -205,7 +205,6 @@
 //   );
 // }
 
-
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -250,14 +249,14 @@ export default function Test() {
     if (!stored) {
       localStorage.setItem(
         "testSession",
-        JSON.stringify({ testKey, startTime: Date.now() })
+        JSON.stringify({ testKey, startTime: Date.now() }),
       );
     } else {
       const parsed = JSON.parse(stored);
       if (parsed.testKey !== testKey) {
         localStorage.setItem(
           "testSession",
-          JSON.stringify({ testKey, startTime: Date.now() })
+          JSON.stringify({ testKey, startTime: Date.now() }),
         );
       }
     }
@@ -344,20 +343,20 @@ export default function Test() {
         setLoading(true);
 
         const res = await axios.get(
-          `http://localhost:8000/aptitude-questions/get-${category}-questions`
+          `http://localhost:8000/aptitude-questions/get-${category}-questions`,
         );
 
-        const allQuestions = Object.values(
-          res.data.data.allQuestions
-        ).map((q) => ({
-          ...q,
-          options: q.options
-            ? Object.entries(q.options).map(([key, value]) => ({
-                key,
-                value,
-              }))
-            : [],
-        }));
+        const allQuestions = Object.values(res.data.data.allQuestions).map(
+          (q) => ({
+            ...q,
+            options: q.options
+              ? Object.entries(q.options).map(([key, value]) => ({
+                  key,
+                  value,
+                }))
+              : [],
+          }),
+        );
 
         const QUESTIONS_PER_TEST = 20;
         const testNumber = parseInt(testName.replace("Test", ""));
@@ -387,26 +386,31 @@ export default function Test() {
     handleSubmit();
   };
 
-  // 🔥 SUBMIT
+  //  SUBMIT
   const handleSubmit = async () => {
     try {
+      console.log("Submit clicked");
       setSubmitting(true);
 
       const session = JSON.parse(localStorage.getItem("testSession"));
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      console.log(user);
 
       const res = await axios.post(
         "http://localhost:8000/aptitude-questions/submit-test",
         {
+          userId: user.id,
           answers,
           startTime: session?.startTime,
-        }
+          category,
+        },
       );
 
       localStorage.removeItem("testSession");
 
       setScore(res?.data?.data?.score);
       setSubmitted(true);
-      setShowResult(true); // ✅ show result first
+      setShowResult(true);
     } catch (err) {
       console.error(err);
     } finally {
@@ -434,7 +438,6 @@ export default function Test() {
   }, [submitted]);
 
   // 🔥 LOADER SCREEN
-
 
   if (loading) return <Typography>Loading...</Typography>;
   if (!questions.length) return <Typography>No questions</Typography>;
@@ -465,9 +468,7 @@ export default function Test() {
             <Typography>
               Score: <b>{score}</b>
             </Typography>
-            <Typography variant="body2">
-              Redirecting shortly...
-            </Typography>
+            <Typography variant="body2">Redirecting shortly...</Typography>
           </CardContent>
         </Card>
       )}
@@ -478,9 +479,7 @@ export default function Test() {
 
           <RadioGroup
             value={answers[q._id] || ""}
-            onChange={(e) =>
-              handleAnswerSelect(q._id, e.target.value)
-            }
+            onChange={(e) => handleAnswerSelect(q._id, e.target.value)}
           >
             {q.options.map((opt) => (
               <FormControlLabel
@@ -506,10 +505,7 @@ export default function Test() {
         </Button>
 
         <Button
-          disabled={
-            submitted ||
-            currentQuestionIndex === questions.length - 1
-          }
+          disabled={submitted || currentQuestionIndex === questions.length - 1}
           onClick={() => setCurrentQuestionIndex((i) => i + 1)}
         >
           Next

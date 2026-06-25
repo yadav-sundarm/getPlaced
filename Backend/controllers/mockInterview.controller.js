@@ -7,6 +7,7 @@ import { generateMockInterviewQuestions } from "../services/geminiMockInterview.
 import { evaluateMockInterview } from "../services/mockInterviewEvaluation.service.js";
 
 import { transcribeAudio } from "../services/assemblyAI.service.js";
+import InterviewResultModel from "../models/interviewResult.model.js";
 
 // ======================================
 // GET ALL COMPANIES
@@ -112,7 +113,7 @@ export const evaluateMockInterviewController = async (req, res) => {
   try {
     console.log("FILES:", req.files);
 
-    const { companyName, interviewType, interviewDuration } = req.body;
+    const { companyName, interviewType, interviewDuration, userId } = req.body;
     // =====================================
     // FIND TOTAL RESPONSE COUNT
     // =====================================
@@ -255,6 +256,20 @@ export const evaluateMockInterviewController = async (req, res) => {
 
       responses,
     });
+
+    if (userId) {
+      await InterviewResultModel.create({
+        userId,
+        companyName,
+        interviewType,
+        overallScore: evaluation.overallScore,
+        communicationScore: evaluation.communicationScore,
+        technicalScore: evaluation.technicalScore,
+        confidenceScore: evaluation.confidenceScore,
+        fluencyScore: evaluation.fluencyScore,
+        verdict: evaluation.verdict,
+      });
+    }
 
     // =====================================
     // ANALYTICS

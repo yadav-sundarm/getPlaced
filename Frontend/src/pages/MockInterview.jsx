@@ -49,6 +49,8 @@ const MockInterview = () => {
 
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
   const currentQuestion = questions[currentIndex];
   useEffect(() => {
     if (!questions.length) {
@@ -305,69 +307,22 @@ const MockInterview = () => {
       submitForEvaluation(updatedResponses);
     }
   };
-  // const handleNext = async () => {
-  //   // stop recording first
-  //   if (isRecording) {
-  //     stopRecording();
 
-  //     // wait for final audio chunk
-  //     await new Promise((resolve) => setTimeout(resolve, 1800));
-  //   }
-
-  //   let audioBlob = null;
-
-  //   if (audioChunksRef.current.length > 0) {
-  //     audioBlob = new Blob(audioChunksRef.current, {
-  //       type: "audio/webm",
-  //     });
-  //   }
-
-  //   console.log("AUDIO CHUNKS:", audioChunksRef.current);
-
-  //   console.log("AUDIO BLOB:", audioBlob);
-
-  //   const updatedResponses = [
-  //     ...responses,
-
-  //     {
-  //       question: currentQuestion,
-
-  //       answer: answer.trim(),
-
-  //       audio: audioBlob,
-  //     },
-  //   ];
-
-  //   console.log("FINAL RESPONSES:", updatedResponses);
-
-  //   setResponses(updatedResponses);
-
-  //   setAnswer("");
-
-  //   setHasVoiceAnswer(false);
-
-  //   audioChunksRef.current = [];
-
-  //   if (currentIndex < questions.length - 1) {
-  //     setCurrentIndex((prev) => prev + 1);
-  //   } else {
-  //     submitForEvaluation(updatedResponses);
-  //   }
-  // };
-  // ---------- SUBMIT ----------
   const submitForEvaluation = async (finalResponses) => {
     try {
       setIsEvaluating(true);
 
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+
       const formData = new FormData();
+      console.log(JSON.parse(localStorage.getItem("user")));
+      formData.append("userId", user.id);
 
       formData.append("companyName", companyName);
-
       formData.append("interviewType", interviewType);
 
       finalResponses.forEach((response, index) => {
         formData.append(`responses[${index}][question]`, response.question);
-
         formData.append(`responses[${index}][answer]`, response.answer);
 
         if (response.audio) {
@@ -378,10 +333,6 @@ const MockInterview = () => {
           );
         }
       });
-
-      for (let pair of formData.entries()) {
-        console.log(pair[0], pair[1]);
-      }
 
       const totalInterviewTime =
         interviewType?.toLowerCase() === "mixed"
@@ -402,7 +353,6 @@ const MockInterview = () => {
       setIsEvaluating(false);
     }
   };
-
   // ---------- LOADING ----------
   if (isEvaluating) {
     return (
