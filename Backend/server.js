@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
+
 import cors from "cors";
 import { createServer } from "http";
 import { connectToServer } from "./controllers/socketManager.js";
@@ -40,8 +41,8 @@ app.use("/dsa", dsaRouter);
 app.use("/api/companies", companiesRoutes);
 app.use("/api/interview", interviewEvaluationRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/admin", adminRoutes); // admin-only routes
-app.use("/api/experience", experienceRoutes); // student experience submission
+app.use("/api/admin", adminRoutes);
+app.use("/api/experience", experienceRoutes);
 
 /* ---------- global error handler ---------- */
 app.use((err, req, res, next) => {
