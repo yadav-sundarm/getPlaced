@@ -18,9 +18,7 @@ const DsaPlayground = () => {
     const response = await axios.get(
       `http://localhost:8000/dsa/get-single-dsa-question/?questionId=${questionId}`,
     );
-
     const question = await response?.data?.data?.dsaQuestion;
-
     setQuestion(question);
   };
 
@@ -49,8 +47,6 @@ const DsaPlayground = () => {
         userId: user.id,
       });
 
-      console.log(response);
-
       setLoading(false);
 
       setOutput(
@@ -66,13 +62,7 @@ const DsaPlayground = () => {
   };
 
   return (
-    <Box
-      sx={{
-        height: "100%",
-        // overflow: "hidden",
-        backgroundColor: "#f8f9fa",
-      }}
-    >
+    <Box sx={{ height: "100%", backgroundColor: "#f8f9fa" }}>
       <Box sx={{ height: "100%" }}>
         <Box
           sx={{
@@ -84,61 +74,42 @@ const DsaPlayground = () => {
           {/* LEFT PANEL */}
           <Paper
             elevation={2}
-            sx={{
-              p: 3,
-              overflowY: "auto",
-              borderRadius: 1,
-            }}
+            sx={{ p: 3, overflowY: "auto", borderRadius: 1 }}
           >
             <Typography variant="h5" fontWeight="bold">
               {question.title}
             </Typography>
-
             <Chip
               label={question.difficultyLevel}
               color="success"
               sx={{ mt: 2 }}
             />
-
             <Divider sx={{ my: 3 }} />
-
             <Typography variant="h6" mb={1}>
               Description
             </Typography>
-
             <Typography color="text.secondary">
               {question.problemDescription}
             </Typography>
-
             <Divider sx={{ my: 3 }} />
-
             <Typography variant="h6" mb={2}>
               Examples
             </Typography>
-
             {question.examples?.map((example, index) => (
               <Paper
                 key={index}
-                sx={{
-                  p: 2,
-                  mb: 2,
-                  backgroundColor: "#f4f4f4",
-                }}
+                sx={{ p: 2, mb: 2, backgroundColor: "#f4f4f4" }}
               >
                 <Typography fontWeight="bold">
                   Example {example?.exampleNumber}
                 </Typography>
-
                 <Typography>{example?.exampleText}</Typography>
               </Paper>
             ))}
-
             <Divider sx={{ my: 3 }} />
-
             <Typography variant="h6" mb={2}>
               Hints
             </Typography>
-
             {question.hints?.map((hint, index) => (
               <Typography key={index} sx={{ mb: 1 }}>
                 • {hint}
@@ -148,39 +119,22 @@ const DsaPlayground = () => {
 
           {/* RIGHT PANEL */}
           <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              height: "100%",
-            }}
+            sx={{ display: "flex", flexDirection: "column", height: "100%" }}
           >
-            {/* CODE EDITOR */}
             <Paper
               elevation={2}
-              sx={{
-                flex: 3,
-                m: 1,
-                p: 2,
-                borderRadius: 0.5,
-              }}
+              sx={{ flex: 3, m: 1, p: 2, borderRadius: 0.5 }}
             >
               <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  mb: 2,
-                }}
+                sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}
               >
                 <Typography variant="h6">Code Editor</Typography>
-
                 <Box>
                   <Button variant="outlined" sx={{ mr: 1 }} onClick={runCode}>
                     Run
                   </Button>
-
                   <FormControl size="small">
                     <InputLabel>Language</InputLabel>
-
                     <Select
                       value={language}
                       label="Language"
@@ -193,7 +147,6 @@ const DsaPlayground = () => {
                   </FormControl>
                 </Box>
               </Box>
-
               <Editor
                 height="90%"
                 defaultLanguage="python"
@@ -211,12 +164,7 @@ const DsaPlayground = () => {
 
             <Paper
               elevation={2}
-              sx={{
-                flex: 1,
-                m: 1,
-                p: 2,
-                borderRadius: 0.5,
-              }}
+              sx={{ flex: 1, m: 1, p: 2, borderRadius: 0.5 }}
             >
               <Box
                 sx={{

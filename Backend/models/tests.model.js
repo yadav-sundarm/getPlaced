@@ -7,10 +7,17 @@ const testsModel = new Schema(
       ref: "UserModel",
     },
 
+<<<<<<< HEAD
     testType: {
       type: String,
       enum: ["Math", "Logical", "Computer", "Mock"],
       required: true,
+=======
+    testType:{
+        type:String,
+        enum: ["math", "logical", "computer", "mock"],
+        required:true,
+>>>>>>> origin/main
     },
     questions: [
       {

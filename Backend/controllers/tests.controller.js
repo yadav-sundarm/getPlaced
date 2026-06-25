@@ -50,7 +50,8 @@ const getComputerQuestions = async (req, res) => {
   );
 };
 
-const TEST_DURATION = 20 * 60 * 1000; // 20 mins
+const TEST_DURATION = 20 * 60 * 1000;
+
 const submitTest = asyncHandler(async (req, res) => {
   const { answers, startTime, category, userId } = req.body;
 
@@ -65,10 +66,10 @@ const submitTest = asyncHandler(async (req, res) => {
     throw new customApiError(403, "Time is over! Test expired.");
   }
 
-  const questionIds = Object.keys(answers); // ✅ declare first
+  const questionIds = Object.keys(answers);
 
   const questions = await questionsModel.find({
-    _id: { $in: questionIds }, // ✅ now it exists
+    _id: { $in: questionIds },
   });
 
   const questionMap = {};
@@ -85,7 +86,7 @@ const submitTest = asyncHandler(async (req, res) => {
 
   try {
     const capitalizedCategory =
-      category.charAt(0).toUpperCase() + category.slice(1).toLowerCase(); // ✅ "math" → "Math"
+      category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
 
     await TestsModel.create({
       userId,
@@ -102,6 +103,7 @@ const submitTest = asyncHandler(async (req, res) => {
     .status(200)
     .json(new customApiResponse("Test evaluated successfully", 200, { score }));
 });
+
 export {
   getAllQuestions,
   getComputerQuestions,

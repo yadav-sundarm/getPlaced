@@ -4,13 +4,11 @@ const dsaQuestionSchema = new Schema(
   {
     title: {
       type: String,
-      // required: true,
       trim: true,
     },
 
     problemSlug: {
       type: String,
-      // required: true,
       unique: true,
       lowercase: true,
       index: true,
@@ -19,7 +17,6 @@ const dsaQuestionSchema = new Schema(
     difficultyLevel: {
       type: String,
       enum: ["easy", "medium", "hard"],
-      // required: true,
     },
 
     topics: {
@@ -29,7 +26,6 @@ const dsaQuestionSchema = new Schema(
 
     problemDescription: {
       type: String, 
-      // required: true,
     },
 
     inputConstraints: {
@@ -52,7 +48,6 @@ const dsaQuestionSchema = new Schema(
         language: {
           type: String,
           enum: ["java", "python", "javascript"],
-          // required: true,
         },
         code: {
           type: String,
@@ -60,11 +55,6 @@ const dsaQuestionSchema = new Schema(
       },
     ],
 
-    // solution: {
-    //   content: {
-    //     type: String, 
-    //   },
-    // },
   },
   { timestamps: true }
 );

@@ -22,9 +22,8 @@ const userDsaAnswerSchema = new Schema({
         type:String,
         required:true,
     },
-    verdict:{
-        type: String,
-        enum: ["AC", "WA", "TLE", "MLE", "RTE", "CE"],
+    success:{
+        type: Boolean,
     },
     timeComplexity: Number, // ms
     spaceComplexity: Number, //kb or mb
