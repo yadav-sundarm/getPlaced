@@ -1,16 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import {
-  Typography,
-  Card,
-  Button,
-  Box,
-} from "@mui/material";
+import { Typography, Card, Button, Box } from "@mui/material";
 import NoteAltIcon from "@mui/icons-material/NoteAlt";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function TestLists() {
-  const { category } = useParams();     
+  const { category } = useParams();
   const navigate = useNavigate();
 
   const [questions, setQuestions] = useState([]);
@@ -43,11 +38,19 @@ export default function TestLists() {
 
   // Fetch questions from backend
   useEffect(() => {
+    const token = localStorage.getItem("accessToken");
     const fetchQuestions = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8000/aptitude-questions/get-${category}-questions`
+          `http://localhost:8000/aptitude-questions/get-${category}-questions`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
         );
+
+        console.log(res);
 
         const questionsArray = Object.values(res.data.data.allQuestions);
         setQuestions(questionsArray);
@@ -58,6 +61,8 @@ export default function TestLists() {
 
     fetchQuestions();
   }, [category]);
+
+  console.log(tests)
 
   useEffect(() => {
     if (questions.length > 0) splitInTests();
@@ -89,7 +94,12 @@ export default function TestLists() {
             <Button
               variant="contained"
               onClick={() =>
-                navigate(`/aptitude-questions/${category}/test/${testName}`)
+                navigate(`/aptitude-questions/${category}/test/${testName}`, {
+                  state:{
+                    category,
+                    testName,
+                  }
+                })
               }
             >
               Start Mock Test

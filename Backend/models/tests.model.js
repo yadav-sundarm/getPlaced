@@ -9,7 +9,7 @@ const testsModel = new Schema({
 
     testType:{
         type:String,
-        enum: ["Math", "Logical", "Computer", "Mock"],
+        enum: ["math", "logical", "computer", "mock"],
         required:true,
     },
     questions:[{

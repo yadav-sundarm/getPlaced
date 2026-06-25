@@ -1,4 +1,5 @@
 import DsaQuestionModel from "../models/dsaQuestion.model.js"
+import userDsaAnswerModel from "../models/userDsaAnswer.model.js"
 import CustomApiError from "../utils/customApiError.js"
 import CustomApiResponse from "../utils/customApiResponse.js"
 import axios from "axios"
@@ -77,7 +78,9 @@ const getSingleDSAQuestion = async (req, res) => {
 
 const runCode = async (req, res) => {
   try {
-    const { language, code, stdin = "" } = req.body;
+    console.log(req.user._id) 
+    console.log(req.user) 
+    const { language, code, questionId, problemSlug, stdin = "" } = req.body;
 
     const languageConfig = {
       python: {
@@ -120,6 +123,24 @@ const runCode = async (req, res) => {
     );
 
     const result = response.data;
+
+    console.log(result)
+
+    const verdict = result?.isExecutionSuccess
+
+    // console.log(req.userId)
+
+    const userAnswer = await userDsaAnswerModel.create({
+      userId: req?.user._id,
+      questionId: questionId,
+      problemSlug: problemSlug,
+      language: language,
+      code: code,
+      success: verdict,
+      timeComplexity: result?.cpuTime,
+      spaceComplexity: result?.memory
+    })
+
 
     return res.status(200).json({
       success: true,

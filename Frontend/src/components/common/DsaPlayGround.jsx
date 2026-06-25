@@ -23,7 +23,7 @@ import {
 const DsaPlayground = () => {
 
   const [question, setQuestion] = useState({})
-  const { questionId } = useParams()
+  const { topic, questionId } = useParams()
   const [language, setLanguage] = useState("python");
   const [code, setCode] = useState("");
   const [output, setOutput] = useState("")
@@ -51,10 +51,15 @@ const DsaPlayground = () => {
 
 
   const runCode = async () => {
+    const token = localStorage.getItem("token")
 
     try {
       setLoading(true)
-      const response = await axios.post("http://localhost:8000/dsa/run-code", { language, code })
+      const response = await axios.post("http://localhost:8000/dsa/run-code", { language, code,questionId, problemSlug:question?.problemSlug }, {
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      })
 
       console.log(response)
 
