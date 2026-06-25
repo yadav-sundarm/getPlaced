@@ -21,9 +21,7 @@ const DSAPractice = () => {
 
   // ✅ Correct fetch function
   const fetchTopics = async () => {
-    const res = await axios.get(
-      "http://localhost:8000/dsa/get-dsa-topics"
-    );
+    const res = await axios.get("http://localhost:8000/dsa/get-dsa-topics");
     return res.data.data.allUniqueTopics;
   };
 
@@ -48,8 +46,7 @@ const DSAPractice = () => {
   };
 
   return (
-    <Box sx={{ p: 5, backgroundColor: "#fff" }}>
-      
+    <Box sx={{ p: 5 }}>
       {/* Loader */}
       {isLoading ? (
         <Box
@@ -66,7 +63,7 @@ const DSAPractice = () => {
         <>
           {/* Heading */}
           <Typography variant="h4" fontWeight="bold" mb={1}>
-            DSA Playground
+            DSA <span style={{ color: "#6366F1" }}>Playground</span>
           </Typography>
           <Typography variant="body1" color="text.secondary" mb={5}>
             Practice your Data Structures & Algorithms topics
@@ -75,17 +72,27 @@ const DSAPractice = () => {
           {/* Grid */}
           <Grid container spacing={4}>
             {currentTopics.map((topic, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index} sx={{ display: "flex" }}>
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                key={index}
+                sx={{ display: "flex" }}
+              >
                 <Card
                   sx={{
                     flex: 1,
                     height: 50,
-                    p:2,
+                    p: 2,
                     borderRadius: 1,
                     boxShadow: 2,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
+                    outline: "none", // ✅
+                    "&:focus": { outline: "none" }, // ✅
+                    "&:focus-visible": { outline: "none" }, // ✅
                     transition: "all 0.3s ease",
                     "&:hover": {
                       transform: "scale(1.03)",
@@ -96,12 +103,25 @@ const DSAPractice = () => {
                   }}
                 >
                   <CardActionArea
+                    disableRipple
+                    disableTouchRipple
                     onClick={() => handleClick(topic)}
                     sx={{
                       height: "100%",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
+                      outline: "none",
+                      border: "none",
+                      "&:focus": {
+                        outline: "none",
+                      },
+                      "&:focus-visible": {
+                        outline: "none",
+                      },
+                      "&.Mui-focusVisible": {
+                        backgroundColor: "transparent",
+                      },
                     }}
                   >
                     <Typography variant="h6" textAlign="center">

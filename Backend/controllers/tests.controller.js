@@ -3,7 +3,7 @@ import asyncHandler from "../utils/asyncHandler.js";
 import questionsModel from "../models/questions.model.js";
 import customApiResponse from "../utils/customApiResponse.js";
 import TestsModel from "../models/tests.model.js";
-
+import mongoose from "mongoose";
 const getAllQuestions = async (req, res) => {
   const allQuestions = await questionsModel.find().select("-correctAnswer");
 
@@ -89,7 +89,7 @@ const submitTest = asyncHandler(async (req, res) => {
       category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
 
     await TestsModel.create({
-      userId,
+      userId: new mongoose.Types.ObjectId(userId),
       testType: capitalizedCategory,
       questions: questionIds,
       score,

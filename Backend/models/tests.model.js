@@ -7,18 +7,12 @@ const testsModel = new Schema(
       ref: "UserModel",
     },
 
-<<<<<<< HEAD
     testType: {
       type: String,
       enum: ["Math", "Logical", "Computer", "Mock"],
       required: true,
-=======
-    testType:{
-        type:String,
-        enum: ["math", "logical", "computer", "mock"],
-        required:true,
->>>>>>> origin/main
     },
+
     questions: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -26,10 +20,12 @@ const testsModel = new Schema(
         required: true,
       },
     ],
+
     score: {
       type: Number,
       default: 0,
     },
+
     totalQuestions: {
       type: Number,
       default: 20,
