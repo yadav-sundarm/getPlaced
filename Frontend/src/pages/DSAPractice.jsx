@@ -70,35 +70,27 @@ const DSAPractice = () => {
           </Typography>
 
           {/* Grid */}
-          <Grid container spacing={4}>
+          <Grid container spacing={3}>
             {currentTopics.map((topic, index) => (
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                key={index}
-                sx={{ display: "flex" }}
-              >
+              <Grid item xs={12} sm={4} md={4} key={index}>
                 <Card
+                  elevation={0}
                   sx={{
-                    flex: 1,
-                    height: 50,
-                    p: 2,
-                    borderRadius: 1,
-                    boxShadow: 2,
+                    minHeight: 120,
+                    borderRadius: 3,
+                    overflow: "hidden",
+                    background: "linear-gradient(180deg, #ffffff 0%, #f7f7ff 100%)",
+                    border: "1px solid rgba(99, 102, 241, 0.16)",
+                    boxShadow: "0 20px 45px rgba(99, 102, 241, 0.08)",
+                    transition: "transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    outline: "none", // ✅
-                    "&:focus": { outline: "none" }, // ✅
-                    "&:focus-visible": { outline: "none" }, // ✅
-                    transition: "all 0.3s ease",
                     "&:hover": {
-                      transform: "scale(1.03)",
-                      boxShadow: 5,
-                      backgroundColor: "#5a34f6",
-                      color: "#fff",
+                      transform: "translateY(-6px)",
+                      boxShadow: "0 26px 55px rgba(99, 102, 241, 0.18)",
+                      borderColor: "rgba(99, 102, 241, 0.32)",
+                      background: "linear-gradient(180deg, #f4f5ff 0%, #e9ecff 100%)",
                     },
                   }}
                 >
@@ -107,25 +99,55 @@ const DSAPractice = () => {
                     disableTouchRipple
                     onClick={() => handleClick(topic)}
                     sx={{
+                      width: "100%",
                       height: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      outline: "none",
-                      border: "none",
-                      "&:focus": {
-                        outline: "none",
-                      },
-                      "&:focus-visible": {
-                        outline: "none",
-                      },
-                      "&.Mui-focusVisible": {
-                        backgroundColor: "transparent",
-                      },
+                      px: 3,
+                      py: 2.5,
+                      display: "grid",
+                      gridTemplateRows: "auto 1fr",
+                      gap: 1,
+                      textAlign: "center",
                     }}
                   >
-                    <Typography variant="h6" textAlign="center">
+                    <Box
+                      sx={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: 34,
+                        height: 34,
+                        borderRadius: "50%",
+                        bgcolor: "rgba(99, 102, 241, 0.12)",
+                        color: "#4f46e5",
+                        mx: "auto",
+                        fontWeight: 700,
+                      }}
+                    >
+                      {String(index + 1)}
+                    </Box>
+
+                    <Typography
+                      variant="h6"
+                      fontWeight={800}
+                      sx={{
+                        letterSpacing: "0.02em",
+                        color: "#111827",
+                        textTransform: "capitalize",
+                        lineHeight: 1.2,
+                      }}
+                    >
                       {topic}
+                    </Typography>
+
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{
+                        mt: 0.5,
+                        px: 1,
+                      }}
+                    >
+                      Practice problems and examples for this topic.
                     </Typography>
                   </CardActionArea>
                 </Card>

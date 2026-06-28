@@ -1,7 +1,7 @@
 import React from "react";
-import { Box, Typography, Chip, Paper, Divider, Button } from "@mui/material";
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Box, Typography, Chip, Paper, Divider, Button, CircularProgress } from "@mui/material";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Editor from "@monaco-editor/react";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
@@ -13,6 +13,9 @@ const DsaPlayground = () => {
   const [code, setCode] = useState("");
   const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [redirecting, setRedirecting] = useState(false);
+  const redirectTimerRef = useRef(null);
+  const navigate = useNavigate();
 
   const fetchQuestions = async () => {
     const response = await axios.get(
@@ -37,7 +40,6 @@ const DsaPlayground = () => {
   const runCode = async () => {
     try {
       setLoading(true);
-
       const user = JSON.parse(localStorage.getItem("user") || "{}");
       const response = await axios.post("http://localhost:8000/dsa/run-code", {
         language,
@@ -47,17 +49,70 @@ const DsaPlayground = () => {
         userId: user.id,
       });
 
+      const resData = response?.data || {};
+
+      // determine if backend signalled an error (several possible fields)
+      const backendError =
+        resData.error ||
+        resData.stderr ||
+        resData.compileError ||
+        resData.runtimeError ||
+        (typeof resData.output === "string" && /error/i.test(resData.output) ? resData.output : null);
+
+      const exitCode = typeof resData.exitCode !== "undefined" ? resData.exitCode : null;
+      const successFlag = typeof resData.success !== "undefined" ? resData.success : null;
+
+      const isSuccessful = (() => {
+        if (successFlag === false) return false;
+        if (backendError) return false;
+        if (exitCode !== null && exitCode !== 0) return false;
+        // if output exists (including empty string) treat as success
+        if (typeof resData.output !== "undefined") return true;
+        // fallback: if there's cpuTime or memory returned assume success
+        if (typeof resData.cpuTime !== "undefined" || typeof resData.memory !== "undefined") return true;
+        return false;
+      })();
+
       setLoading(false);
 
-      setOutput(
-        response?.data?.output === ""
-          ? "Code executed successfully with no output"
-          : response?.data?.output,
-      );
+      if (isSuccessful) {
+        setOutput(
+          resData.output === "" || typeof resData.output === "undefined"
+            ? "Code executed successfully with no output"
+            : resData.output,
+        );
+
+        // only redirect when execution succeeded
+        setRedirecting(true);
+        if (redirectTimerRef.current) {
+          clearTimeout(redirectTimerRef.current);
+        }
+        redirectTimerRef.current = setTimeout(() => {
+          setRedirecting(false);
+          navigate("/dsa-review", {
+            state: {
+              questionTitle: question.title,
+              questionDescription: question.problemDescription,
+              code,
+              language,
+              timeComplexity: resData.cpuTime,
+              spaceComplexity: resData.memory,
+            },
+          });
+        }, 5000);
+      } else {
+        // do not redirect on error — show error details
+        const message =
+          backendError || resData.message || resData.detail || "Error executing code";
+        setOutput(message);
+        setRedirecting(false);
+      }
+      
     } catch (error) {
       console.log(error);
-      setOutput("Error executing code");
+      setOutput(error?.response?.data?.message || error.message || "Error executing code");
       setLoading(false);
+      setRedirecting(false);
     }
   };
 
@@ -183,6 +238,26 @@ const DsaPlayground = () => {
                 )}
               </Box>
             </Paper>
+
+            {redirecting && (
+              <Paper
+                elevation={2}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 2,
+                  m: 1,
+                  p: 2,
+                  borderRadius: 0.5,
+                }}
+              >
+                <CircularProgress size={24} />
+                <Typography>
+                  Redirecting to review page. Showing AI review ...
+                </Typography>
+              </Paper>
+            )}
           </Box>
         </Box>
       </Box>
