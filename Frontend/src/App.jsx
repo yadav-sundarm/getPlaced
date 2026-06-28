@@ -24,12 +24,15 @@ import MockInterview from "./pages/MockInterview";
 import ExperienceShare from "./pages/ExperienceShare.jsx";    // UPDATED
 import DsaQuestionsList from "./components/common/DsaQuestionsList.jsx";
 import DsaPlayGround from "./components/common/DsaPlayGround.jsx";
+import DsaReview from "./pages/DsaReview.jsx";
+import TestReview from "./pages/TestReview.jsx";
 
 // ── Admin pages (NEW) ──
 import AdminLogin from "./pages/admin/AdminLogin.jsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 import AdminSubmissions from "./pages/admin/AdminSubmissions.jsx";
 import AdminPdfUpload from "./pages/admin/AdminPdfUpload.jsx";
+
 
 const theme = createTheme({
   palette: {
@@ -141,6 +144,7 @@ function App() {
 
             {/* DSA */}
             <Route path="dsa-practice" element={<DSAPractice />} />
+            <Route path="dsa-review" element={<DsaReview />} />
             <Route path="dsa-practise/:topic" element={<DsaQuestionsList />} />
             <Route path="dsa-practise/:topic/:questionId" element={<DsaPlayGround />} />
 

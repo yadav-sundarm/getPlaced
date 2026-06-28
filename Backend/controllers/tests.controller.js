@@ -95,9 +95,18 @@ const submitTest = asyncHandler(async (req, res) => {
       score,
       totalQuestions: questionIds.length,
     });
+
+
+    
+
+
+    
   } catch (err) {
     console.error(err);
   }
+
+
+  
 
   return res
     .status(200)
