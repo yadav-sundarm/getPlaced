@@ -8,18 +8,14 @@ const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_MOCK_INTERVIEW_API_KEY,
 });
 
-// =====================================
 // SAFE VALUE
-// =====================================
 const safeValue = (value, fallback = 0) => {
   return value !== undefined && value !== null && value !== ""
     ? value
     : fallback;
 };
 
-// =====================================
 // NORMALIZE SCORE
-// =====================================
 const normalizeScore = (score) => {
   let num = Number(score);
 
@@ -38,16 +34,12 @@ export async function evaluateMockInterview({
   responses,
 }) {
   try {
-    // =====================================
     // VALID RESPONSES
-    // =====================================
     const validResponses = responses.filter(
       (item) => item.answer && item.answer.trim().length > 0,
     );
 
-    // =====================================
     // NO ANSWERS
-    // =====================================
     if (validResponses.length === 0) {
       return {
         overallScore: 1,
@@ -70,9 +62,7 @@ export async function evaluateMockInterview({
       };
     }
 
-    // =====================================
     // FORMAT QA
-    // =====================================
     const formattedQA = validResponses
       .map((item, index) => {
         const hasVoiceData = item.wordsPerMinute > 0 || item.fluencyScore > 0;
@@ -122,9 +112,7 @@ NO VOICE ANALYSIS AVAILABLE
 
     console.log(formattedQA);
 
-    // =====================================
     // PROMPT
-    // =====================================
     const prompt = `
 You are a STRICT AI mock interview evaluator.
 
@@ -289,13 +277,7 @@ OUTPUT FORMAT:
   "suggestions": [string]
 }
 `;
-
-    // =====================================
-    // GEMINI CALL
-    // =====================================
-    // =====================================
     // GEMINI CALL WITH RETRY
-    // =====================================
     const generateWithRetry = async (params, retries = 3, delay = 3000) => {
       for (let i = 0; i < retries; i++) {
         try {
@@ -312,6 +294,7 @@ OUTPUT FORMAT:
         }
       }
     };
+
     const result = await generateWithRetry({
       model: "gemini-2.5-flash",
       config: { responseMimeType: "application/json" },
@@ -326,14 +309,10 @@ OUTPUT FORMAT:
 
     const parsed = JSON.parse(cleanedText);
 
-    // =====================================
     // TECHNICAL SCORE
-    // =====================================
     const technicalScore = normalizeScore(parsed.technicalScore);
 
-    // =====================================
     // FLUENCY SCORE
-    // =====================================
     const avgFluency =
       validResponses.reduce((acc, item) => acc + (item.fluencyScore || 0), 0) /
       validResponses.length;
@@ -343,9 +322,7 @@ OUTPUT FORMAT:
       Math.min(10, Number(avgFluency.toFixed(1))),
     );
 
-    // =====================================
     // TOTAL FILLERS + PAUSES
-    // =====================================
     const totalFillers = validResponses.reduce(
       (acc, item) => acc + (item.fillerCount || 0),
       0,
@@ -356,9 +333,7 @@ OUTPUT FORMAT:
       0,
     );
 
-    // =====================================
     // CONFIDENCE SCORE
-    // =====================================
     let confidenceScore = (fluencyScore + 8) / 2;
 
     // softer penalties
@@ -375,9 +350,7 @@ OUTPUT FORMAT:
       Math.min(10, Number(confidenceScore.toFixed(1))),
     );
 
-    // =====================================
     // COMMUNICATION SCORE
-    // =====================================
     let communicationScore = (confidenceScore + fluencyScore) / 2;
 
     // slight technical clarity influence
@@ -390,21 +363,39 @@ OUTPUT FORMAT:
       Math.min(10, Number(communicationScore.toFixed(1))),
     );
 
-    // =====================================
     // OVERALL SCORE
-    // =====================================
-    const overallScore = Number(
-      (
-        technicalScore * 0.4 +
-        communicationScore * 0.25 +
-        confidenceScore * 0.2 +
-        fluencyScore * 0.15
-      ).toFixed(1),
-    );
+    let overallScore;
 
-    // =====================================
+    if (interviewType === "HR") {
+      overallScore = Number(
+        (
+          communicationScore * 0.4 +
+          confidenceScore * 0.3 +
+          fluencyScore * 0.2 +
+          technicalScore * 0.1
+        ).toFixed(1),
+      );
+    } else if (interviewType === "Technical") {
+      overallScore = Number(
+        (
+          technicalScore * 0.5 +
+          communicationScore * 0.2 +
+          confidenceScore * 0.2 +
+          fluencyScore * 0.1
+        ).toFixed(1),
+      );
+    } else {
+      overallScore = Number(
+        (
+          technicalScore * 0.35 +
+          communicationScore * 0.25 +
+          confidenceScore * 0.25 +
+          fluencyScore * 0.15
+        ).toFixed(1),
+      );
+    }
+
     // VERDICT
-    // =====================================
     let verdict = "Average";
 
     if (overallScore >= 8) verdict = "Excellent";
@@ -412,9 +403,7 @@ OUTPUT FORMAT:
     else if (overallScore >= 4) verdict = "Average";
     else verdict = "Poor";
 
-    // =====================================
     // RETURN
-    // =====================================
     return {
       overallScore,
 

@@ -1,12 +1,12 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
 // ── Layouts & Auth ──
 import Layout from "./components/layout/Layout.jsx";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
-import AdminRoute from "./components/auth/AdminRoute.jsx";   // NEW
-
+import AdminRoute from "./components/auth/AdminRoute.jsx"; // NEW
+import NotFound from "./pages/NotFound";
 // ── Student pages ──
 import LoginSignup from "./pages/LoginSignup";
 import Dashboard from "./pages/Dashboard";
@@ -21,18 +21,16 @@ import TestLists from "./components/common/TestLists.jsx";
 import Test from "./pages/Test.jsx";
 import MockInterviewSetup from "./pages/MockInterviewSetup.jsx";
 import MockInterview from "./pages/MockInterview";
-import ExperienceShare from "./pages/ExperienceShare.jsx";    // UPDATED
+import ExperienceShare from "./pages/ExperienceShare.jsx"; // UPDATED
 import DsaQuestionsList from "./components/common/DsaQuestionsList.jsx";
 import DsaPlayGround from "./components/common/DsaPlayGround.jsx";
 import DsaReview from "./pages/DsaReview.jsx";
-import TestReview from "./pages/TestReview.jsx";
 
 // ── Admin pages (NEW) ──
 import AdminLogin from "./pages/admin/AdminLogin.jsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 import AdminSubmissions from "./pages/admin/AdminSubmissions.jsx";
 import AdminPdfUpload from "./pages/admin/AdminPdfUpload.jsx";
-
 
 const theme = createTheme({
   palette: {
@@ -81,8 +79,16 @@ function App() {
           {/* ═══════════════════════════════
               🔓 Public – Student Login
           ═══════════════════════════════ */}
-          <Route path="/" element={<LoginSignup />} />
-
+          <Route
+            path="/"
+            element={
+              localStorage.getItem("token") ? (
+                <Navigate to="/dashboard" replace />
+              ) : (
+                <LoginSignup />
+              )
+            }
+          />
           {/* ═══════════════════════════════
               🔐 Admin – no CssBaseline so
               html/body stay scrollable
@@ -131,7 +137,10 @@ function App() {
 
             {/* Mock Interviews */}
             <Route path="/mock-interviews" element={<Company />} />
-            <Route path="/mock-interview/:companyName" element={<MockInterviewSetup />} />
+            <Route
+              path="/mock-interview/:companyName"
+              element={<MockInterviewSetup />}
+            />
             <Route path="/interview" element={<MockInterview />} />
 
             {/* Experience Share */}
@@ -139,14 +148,23 @@ function App() {
 
             {/* Aptitude */}
             <Route path="aptitude-questions" element={<AptitudePractice />} />
-            <Route path="/aptitude-questions/:category" element={<TestLists />} />
-            <Route path="/aptitude-questions/:category/test/:testName" element={<Test />} />
+            <Route
+              path="/aptitude-questions/:category"
+              element={<TestLists />}
+            />
+            <Route
+              path="/aptitude-questions/:category/test/:testName"
+              element={<Test />}
+            />
 
             {/* DSA */}
             <Route path="dsa-practice" element={<DSAPractice />} />
             <Route path="dsa-review" element={<DsaReview />} />
             <Route path="dsa-practise/:topic" element={<DsaQuestionsList />} />
-            <Route path="dsa-practise/:topic/:questionId" element={<DsaPlayGround />} />
+            <Route
+              path="dsa-practise/:topic/:questionId"
+              element={<DsaPlayGround />}
+            />
 
             {/* Other */}
             <Route path="resume-analyzer" element={<ResumeAnalyzer />} />
@@ -154,6 +172,8 @@ function App() {
             <Route path="meet/:url" element={<VideoMeet />} />
             <Route path="settings" element={<SettingsPage />} />
           </Route>
+
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

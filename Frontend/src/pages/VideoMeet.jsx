@@ -144,7 +144,7 @@ export default function VideoMeet() {
             socketRef.current.emit(
               "signal",
               id,
-              JSON.stringify({ sdp: connections[id].localDescription })
+              JSON.stringify({ sdp: connections[id].localDescription }),
             );
           })
           .catch((e) => console.log(e));
@@ -180,13 +180,13 @@ export default function VideoMeet() {
                   socketRef.current.emit(
                     "signal",
                     id,
-                    JSON.stringify({ sdp: connections[id].localDescription })
+                    JSON.stringify({ sdp: connections[id].localDescription }),
                   );
                 })
                 .catch((e) => console.log(e));
             });
           }
-        })
+        }),
     );
   };
 
@@ -236,12 +236,17 @@ export default function VideoMeet() {
     }
 
     window.localStream = stream;
-    localVideoref.current.srcObject = stream;
+    localVideoRef.current.srcObject = stream;
 
     for (let id in connections) {
       if (id === socketIdRef.current) continue;
 
-      connections[id].addStream(window.localStream);
+      const senders = connections[id].getSenders();
+      senders.forEach((sender) => connections[id].removeTrack(sender));
+
+      stream.getTracks().forEach((track) => {
+        connections[id].addTrack(track, stream);
+      });
 
       connections[id].createOffer().then((description) => {
         connections[id]
@@ -250,7 +255,7 @@ export default function VideoMeet() {
             socketRef.current.emit(
               "signal",
               id,
-              JSON.stringify({ sdp: connections[id].localDescription })
+              JSON.stringify({ sdp: connections[id].localDescription }),
             );
           })
           .catch((e) => console.log(e));
@@ -263,7 +268,7 @@ export default function VideoMeet() {
           setScreen(false);
 
           try {
-            let tracks = localVideoref.current.srcObject.getTracks();
+            let tracks = localVideoRef.current.srcObject.getTracks();
             tracks.forEach((track) => track.stop());
           } catch (e) {
             console.log(e);
@@ -272,10 +277,10 @@ export default function VideoMeet() {
           let blackSilence = (...args) =>
             new MediaStream([black(...args), silence()]);
           window.localStream = blackSilence();
-          localVideoref.current.srcObject = window.localStream;
+          localVideoRef.current.srcObject = window.localStream;
 
           getUserMedia();
-        })
+        }),
     );
   };
 
@@ -307,7 +312,7 @@ export default function VideoMeet() {
       socketRef.current.on("user-joined", (id, clients) => {
         clients.forEach((socketListId) => {
           connections[socketListId] = new RTCPeerConnection(
-            peerConfigConnection
+            peerConfigConnection,
           );
 
           connections[socketListId].onicecandidate = function (event) {
@@ -315,7 +320,7 @@ export default function VideoMeet() {
               socketRef.current.emit(
                 "signal",
                 socketListId,
-                JSON.stringify({ ice: event.candidate })
+                JSON.stringify({ ice: event.candidate }),
               );
             }
           };
@@ -325,7 +330,7 @@ export default function VideoMeet() {
             console.log("FINDING ID: ", socketListId);
 
             let videoExists = videoRef.current.find(
-              (video) => video.socketId === socketListId
+              (video) => video.socketId === socketListId,
             );
 
             if (videoExists) {
@@ -335,7 +340,7 @@ export default function VideoMeet() {
                 const updatedVideos = videos.map((video) =>
                   video.socketId === socketListId
                     ? { ...video, stream: event.stream }
-                    : video
+                    : video,
                 );
                 videoRef.current = updatedVideos;
                 return updatedVideos;
@@ -382,7 +387,7 @@ export default function VideoMeet() {
                   socketRef.current.emit(
                     "signal",
                     id2,
-                    JSON.stringify({ sdp: connections[id2].localDescription })
+                    JSON.stringify({ sdp: connections[id2].localDescription }),
                   );
                 })
                 .catch((e) => console.log(e));
@@ -413,7 +418,7 @@ export default function VideoMeet() {
                         fromId,
                         JSON.stringify({
                           sdp: connections[fromId].localDescription,
-                        })
+                        }),
                       );
                     })
                     .catch((e) => console.log(e));
@@ -444,10 +449,10 @@ export default function VideoMeet() {
 
   let handleEndCall = () => {
     try {
-      let tracks = localVideoref.current.srcObject.getTracks();
+      let tracks = localVideoRef.current.srcObject.getTracks();
       tracks.forEach((track) => track.stop());
     } catch (e) {}
-    window.location.href = "/";
+    window.location.href = "/dashboard";
   };
 
   let handleVideo = () => {

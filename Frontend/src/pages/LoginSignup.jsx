@@ -20,7 +20,10 @@ import CodeIcon from "@mui/icons-material/Code";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import RecordVoiceOverIcon from "@mui/icons-material/RecordVoiceOver";
 import GroupsIcon from "@mui/icons-material/Groups";
-
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { loginUser, signupUser } from "../api/auth.api";
 
 const departments = ["CSE", "IT", "AIML", "DS", "EXTC", "MTECH", "MCA"];
@@ -45,7 +48,7 @@ const features = [
 export default function LoginSignup() {
   const [mode, setMode] = useState("login");
   const [error, setError] = useState("");
-
+  const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -286,29 +289,36 @@ export default function LoginSignup() {
                     />
                     <TextField
                       label="Password"
-                      type="password"
-                      fullWidth
-                      size={mode === "signup" ? "small" : "medium"}
+                      type={showPassword ? "text" : "password"}
                       onChange={handleChange("password")}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() => setShowPassword(!showPassword)}
+                              disableRipple
+                              sx={{
+                                p: 0,
+                                border: "none",
+                                boxShadow: "none",
+                                "&:hover": {
+                                  background: "transparent",
+                                },
+                                "&:focus": {
+                                  outline: "none",
+                                },
+                              }}
+                            >
+                              {showPassword ? (
+                                <Visibility />
+                              ) : (
+                                <VisibilityOff />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
                     />
-
-                    <Stack
-                      direction="row"
-                      justifyContent="space-between"
-                      alignItems="center"
-                    >
-                      <Stack direction="row" alignItems="center" spacing={1}>
-                        <Checkbox size="small" />
-                        <Typography fontSize="0.9rem">Remember me</Typography>
-                      </Stack>
-                      <Typography
-                        fontSize="0.85rem"
-                        sx={{ color: "#5b5ce2", cursor: "pointer" }}
-                      >
-                        Forgot password?
-                      </Typography>
-                    </Stack>
-
                     <Button
                       type="submit"
                       fullWidth

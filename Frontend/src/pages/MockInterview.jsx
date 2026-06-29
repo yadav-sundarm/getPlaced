@@ -49,6 +49,8 @@ const MockInterview = () => {
 
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
+  const [evalError, setEvalError] = useState("");
+
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   const currentQuestion = questions[currentIndex];
@@ -349,6 +351,9 @@ const MockInterview = () => {
       setEvaluation(res.data);
     } catch (error) {
       console.error(error);
+      setEvalError(
+        "Evaluation failed. Gemini may be overloaded. Please try again.",
+      );
     } finally {
       setIsEvaluating(false);
     }
@@ -386,6 +391,31 @@ const MockInterview = () => {
             borderRadius: 10,
           }}
         />
+      </Container>
+    );
+  }
+
+  if (evalError) {
+    return (
+      <Container maxWidth="sm" sx={{ mt: 14, textAlign: "center" }}>
+        <Typography variant="h5" fontWeight={700} mb={2} color="#ef4444">
+          Evaluation Failed
+        </Typography>
+        <Typography color="#6b7280" mb={4}>
+          {evalError}
+        </Typography>
+        <Button
+          variant="contained"
+          onClick={() => navigate("/mock-interviews")}
+          sx={{
+            borderRadius: "12px",
+            textTransform: "none",
+            fontWeight: 700,
+            background: "#4f46e5",
+          }}
+        >
+          Back to Interviews
+        </Button>
       </Container>
     );
   }

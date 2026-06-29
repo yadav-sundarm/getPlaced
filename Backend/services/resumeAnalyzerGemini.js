@@ -51,20 +51,30 @@ Resume text:
 ${resumeText.slice(0, 5000)}
 `;
 
-    const result = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: [
-        {
-          role: "user",
-          parts: [{ text: prompt }],
-        },
-      ],
-    });
+    const models = ["gemini-2.5-flash", "gemini-2.0-flash"];
 
-    const rawText = result.text;
+    let result;
+    for (const model of models) {
+      try {
+        result = await ai.models.generateContent({
+          model,
+          contents: [{ role: "user", parts: [{ text: prompt }] }],
+        });
+        break;
+      } catch (err) {
+        const is503 =
+          err.message?.includes("503") || err.message?.includes("UNAVAILABLE");
+        if (is503) {
+          console.log(`${model} unavailable, trying next...`);
+          continue;
+        }
+        throw err;
+      }
+    }
 
-    // Safety cleanup (Gemini sometimes adds stray formatting)
-    const cleanedText = rawText
+    if (!result) throw new Error("All Gemini models unavailable");
+
+    const cleanedText = result.text
       .replace(/```json/g, "")
       .replace(/```/g, "")
       .trim();

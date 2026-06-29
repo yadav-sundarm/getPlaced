@@ -1,7 +1,5 @@
 import express from "express";
 import "./config/dotenv.js";
-console.log("below dotenv",process.env.GEMINI_EVALUATION_API_KEY);
-console.log("JWT in server:", process.env.JWT_SECRET);
 import cors from "cors";
 import { createServer } from "http";
 import { connectToServer } from "./controllers/socketManager.js";
@@ -19,7 +17,6 @@ import companiesRoutes from "./routes/mockInterview.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 import experienceRoutes from "./routes/experience.routes.js";
-
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -76,8 +73,6 @@ const startServer = async () => {
       await seedDSAQuestionsInDatabase();
       console.log("DSA Questions extracted and saved successfully");
     }
-
-
 
     server.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

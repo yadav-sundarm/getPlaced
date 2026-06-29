@@ -6,7 +6,7 @@ export default function AptitudePractice() {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Typography variant="h4" fontWeight={600}>
-        Practice Aptitude
+        Practice <span style={{ color: "#6366F1" }}>Aptitude</span>
       </Typography>
 
       <Typography color="text.secondary" mb={4}>

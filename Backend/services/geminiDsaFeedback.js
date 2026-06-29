@@ -2,12 +2,16 @@ import CustomApiResponse from "../utils/customApiResponse.js";
 import { ai } from "../utils/gemini.js";
 
 export const generateDsaFeedback = async (req, res) => {
+  const {
+    code,
+    language,
+    timeComplexity,
+    spaceComplexity,
+    questionTitle,
+    questionDescription,
+  } = req.body;
 
-    const {code, language, timeComplexity, spaceComplexity, questionTitle, questionDescription} = req.body
-
-
-    console.log("GEMINI BACKEND LOGS")
-
+  console.log("GEMINI BACKEND LOGS");
 
   const prompt = `
     You are an experienced Data Structures and Algorithms mentor.
@@ -56,24 +60,56 @@ Rules:
 - Do not include markdown.
     `;
 
+  try {
+    const models = ["gemini-2.5-flash", "gemini-2.0-flash"];
 
-    try {
+    let actualReview;
+
+    for (const model of models) {
+      try {
         const response = await ai.models.generateContent({
-            model: "gemini-3.1-flash-lite",
-            contents: prompt,
-        })
-
-        const actualReview = await response.candidates[0].content.parts[0]?.text
-
-        const data = await JSON.parse(actualReview)
-
-        return res.status(200).json(
-           new CustomApiResponse({message: "Fetched the ai response successfully", statusCode: 200, data:data})
-        )
-
-    } catch (error) {
-        return res.status(500).json({
-        message: error.message
-    });
+          model,
+          contents: prompt,
+        });
+        actualReview = response.candidates[0].content.parts[0]?.text;
+        break;
+      } catch (err) {
+        const is503 =
+          err.message?.includes("503") || err.message?.includes("UNAVAILABLE");
+        if (is503) {
+          console.log(`${model} unavailable, trying next...`);
+          continue;
+        }
+        throw err;
+      }
     }
+
+    if (!actualReview) throw new Error("All Gemini models unavailable");
+
+    console.log("Gemini Response:");
+    console.log(actualReview);
+
+    const data = JSON.parse(actualReview);
+
+    return res.status(200).json(
+      new CustomApiResponse({
+        message: "Fetched the ai response successfully",
+        statusCode: 200,
+        data: data,
+      }),
+    );
+  } catch (error) {
+    console.error("===== GEMINI ERROR =====");
+    console.error(error);
+    console.error("Message:", error.message);
+    console.error("Stack:", error.stack);
+
+    if (error.response) {
+      console.error(error.response);
+    }
+
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
 };

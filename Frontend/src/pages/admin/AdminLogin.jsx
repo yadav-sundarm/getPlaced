@@ -10,7 +10,11 @@ import {
   InputAdornment,
   IconButton,
 } from "@mui/material";
-import { Visibility, VisibilityOff, AdminPanelSettings } from "@mui/icons-material";
+import {
+  Visibility,
+  VisibilityOff,
+  AdminPanelSettings,
+} from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -19,15 +23,15 @@ const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 const AdminLogin = () => {
   // Force body/html to be scrollable — overrides any leftover styles from student Layout
   React.useEffect(() => {
-    document.documentElement.style.overflow = 'auto';
-    document.documentElement.style.height = 'auto';
-    document.body.style.overflow = 'auto';
-    document.body.style.height = 'auto';
+    document.documentElement.style.overflow = "auto";
+    document.documentElement.style.height = "auto";
+    document.body.style.overflow = "auto";
+    document.body.style.height = "auto";
     return () => {
-      document.documentElement.style.overflow = '';
-      document.documentElement.style.height = '';
-      document.body.style.overflow = '';
-      document.body.style.height = '';
+      document.documentElement.style.overflow = "";
+      document.documentElement.style.height = "";
+      document.body.style.overflow = "";
+      document.body.style.height = "";
     };
   }, []);
 
@@ -63,7 +67,9 @@ const AdminLogin = () => {
       localStorage.setItem("adminUser", JSON.stringify(user));
       navigate("/admin/dashboard");
     } catch (err) {
-      setError(err?.response?.data?.message || "Login failed. Please try again.");
+      setError(
+        err?.response?.data?.message || "Login failed. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -73,7 +79,8 @@ const AdminLogin = () => {
     <Box
       sx={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%)",
+        background:
+          "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -130,7 +137,6 @@ const AdminLogin = () => {
             value={form.email}
             onChange={handleChange}
             sx={{ mb: 2.5 }}
-            placeholder="admin@ves.ac.in"
           />
 
           <TextField
@@ -144,8 +150,27 @@ const AdminLogin = () => {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton onClick={() => setShowPass(!showPass)} edge="end">
-                    {showPass ? <VisibilityOff /> : <Visibility />}
+                  <IconButton
+                    edge="end"
+                    disableRipple
+                    disableFocusRipple
+                    onClick={() => setShowPass(!showPass)}
+                    sx={{
+                      p: 0,
+                      m: 0,
+                      border: "none",
+                      borderRadius: 0,
+                      backgroundColor: "transparent",
+                      boxShadow: "none",
+                      "&:hover": {
+                        backgroundColor: "transparent",
+                      },
+                      "&:focus": {
+                        outline: "none",
+                      },
+                    }}
+                  >
+                    {showPass ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
               ),
@@ -170,7 +195,11 @@ const AdminLogin = () => {
               },
             }}
           >
-            {loading ? <CircularProgress size={22} sx={{ color: "#fff" }} /> : "Sign In"}
+            {loading ? (
+              <CircularProgress size={22} sx={{ color: "#fff" }} />
+            ) : (
+              "Sign In"
+            )}
           </Button>
         </Box>
 

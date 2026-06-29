@@ -127,7 +127,7 @@ const DsaReview = () => {
         }}
       >
         <Typography variant="h4" fontWeight={700} gutterBottom>
-          AI Review
+          AI <span style={{ color: "#4f46e5" }}>Review</span>
         </Typography>
         <Typography color="text.secondary" sx={{ mb: 3 }}>
           {reviewParams.questionTitle ||
@@ -175,35 +175,50 @@ const DsaReview = () => {
                       <Typography variant="h6" fontWeight={700} gutterBottom>
                         Summary
                       </Typography>
-                      <Typography color="text.secondary" sx={{ whiteSpace: "pre-wrap" }}>
+                      <Typography
+                        color="text.secondary"
+                        sx={{ whiteSpace: "pre-wrap" }}
+                      >
                         {reviewText.summary}
                       </Typography>
                     </Box>
                   )}
 
-                  <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", mb: 2 }}>
-                    <Tooltip title={reviewText?.timeComplexity || "Not available"} arrow>
+                  <Box
+                    sx={{ display: "flex", gap: 1, flexWrap: "wrap", mb: 2 }}
+                  >
+                    <Tooltip
+                      title={reviewText?.timeComplexity || "Not available"}
+                      arrow
+                    >
                       <Chip
                         label={`Time: ${reviewText?.timeComplexity || "N/A"}`}
                         color="primary"
                         variant="outlined"
                         onClick={() => {
                           setDialogTitle("Time Complexity");
-                          setDialogContentText(reviewText?.timeComplexity || "N/A");
+                          setDialogContentText(
+                            reviewText?.timeComplexity || "N/A",
+                          );
                           setDialogOpen(true);
                         }}
                         sx={{ cursor: "pointer" }}
                       />
                     </Tooltip>
 
-                    <Tooltip title={reviewText?.spaceComplexity || "Not available"} arrow>
+                    <Tooltip
+                      title={reviewText?.spaceComplexity || "Not available"}
+                      arrow
+                    >
                       <Chip
                         label={`Space: ${reviewText?.spaceComplexity || "N/A"}`}
                         color="primary"
                         variant="outlined"
                         onClick={() => {
                           setDialogTitle("Space Complexity");
-                          setDialogContentText(reviewText?.spaceComplexity || "N/A");
+                          setDialogContentText(
+                            reviewText?.spaceComplexity || "N/A",
+                          );
                           setDialogOpen(true);
                         }}
                         sx={{ cursor: "pointer" }}
@@ -211,66 +226,93 @@ const DsaReview = () => {
                     </Tooltip>
                   </Box>
 
-                  {Array.isArray(reviewText?.strengths) && reviewText.strengths.length > 0 && (
-                    <Box sx={{ mb: 2 }}>
-                      <Typography variant="h6" fontWeight={700} gutterBottom>
-                        Strengths
-                      </Typography>
-                      <List dense>
-                        {reviewText.strengths.map((s, i) => (
-                          <ListItem key={`strength-${i}`}>
-                            <ListItemIcon sx={{ minWidth: 36 }}>
-                              <CheckCircleIcon color="success" />
-                            </ListItemIcon>
-                            <ListItemText primary={s} primaryTypographyProps={{ style: { whiteSpace: 'pre-wrap' } }} />
-                          </ListItem>
-                        ))}
-                      </List>
-                    </Box>
-                  )}
+                  {Array.isArray(reviewText?.strengths) &&
+                    reviewText.strengths.length > 0 && (
+                      <Box sx={{ mb: 2 }}>
+                        <Typography variant="h6" fontWeight={700} gutterBottom>
+                          Strengths
+                        </Typography>
+                        <List dense>
+                          {reviewText.strengths.map((s, i) => (
+                            <ListItem key={`strength-${i}`}>
+                              <ListItemIcon sx={{ minWidth: 36 }}>
+                                <CheckCircleIcon color="success" />
+                              </ListItemIcon>
+                              <ListItemText
+                                primary={s}
+                                primaryTypographyProps={{
+                                  style: { whiteSpace: "pre-wrap" },
+                                }}
+                              />
+                            </ListItem>
+                          ))}
+                        </List>
+                      </Box>
+                    )}
 
-                  {Array.isArray(reviewText?.improvements) && reviewText.improvements.length > 0 && (
-                    <Box sx={{ mb: 2 }}>
-                      <Typography variant="h6" fontWeight={700} gutterBottom>
-                        Improvements
-                      </Typography>
-                      <List dense>
-                        {reviewText.improvements.map((imp, i) => (
-                          <ListItem key={`imp-${i}`}>
-                            <ListItemIcon sx={{ minWidth: 36 }}>
-                              <ArrowForwardIosIcon fontSize="small" color="action" />
-                            </ListItemIcon>
-                            <ListItemText primary={imp} primaryTypographyProps={{ style: { whiteSpace: 'pre-wrap' } }} />
-                          </ListItem>
-                        ))}
-                      </List>
-                    </Box>
-                  )}
+                  {Array.isArray(reviewText?.improvements) &&
+                    reviewText.improvements.length > 0 && (
+                      <Box sx={{ mb: 2 }}>
+                        <Typography variant="h6" fontWeight={700} gutterBottom>
+                          Improvements
+                        </Typography>
+                        <List dense>
+                          {reviewText.improvements.map((imp, i) => (
+                            <ListItem key={`imp-${i}`}>
+                              <ListItemIcon sx={{ minWidth: 36 }}>
+                                <ArrowForwardIosIcon
+                                  fontSize="small"
+                                  color="action"
+                                />
+                              </ListItemIcon>
+                              <ListItemText
+                                primary={imp}
+                                primaryTypographyProps={{
+                                  style: { whiteSpace: "pre-wrap" },
+                                }}
+                              />
+                            </ListItem>
+                          ))}
+                        </List>
+                      </Box>
+                    )}
 
-                  {Array.isArray(reviewText?.nextSteps) && reviewText.nextSteps.length > 0 && (
-                    <Box sx={{ mb: 2 }}>
-                      <Typography variant="h6" fontWeight={700} gutterBottom>
-                        Next Steps
-                      </Typography>
-                      <List dense>
-                        {reviewText.nextSteps.map((n, i) => (
-                          <ListItem key={`next-${i}`}>
-                            <ListItemIcon sx={{ minWidth: 36 }}>
-                              <ArrowForwardIosIcon fontSize="small" color="action" />
-                            </ListItemIcon>
-                            <ListItemText primary={n} primaryTypographyProps={{ style: { whiteSpace: 'pre-wrap' } }} />
-                          </ListItem>
-                        ))}
-                      </List>
-                    </Box>
-                  )}
+                  {Array.isArray(reviewText?.nextSteps) &&
+                    reviewText.nextSteps.length > 0 && (
+                      <Box sx={{ mb: 2 }}>
+                        <Typography variant="h6" fontWeight={700} gutterBottom>
+                          Next Steps
+                        </Typography>
+                        <List dense>
+                          {reviewText.nextSteps.map((n, i) => (
+                            <ListItem key={`next-${i}`}>
+                              <ListItemIcon sx={{ minWidth: 36 }}>
+                                <ArrowForwardIosIcon
+                                  fontSize="small"
+                                  color="action"
+                                />
+                              </ListItemIcon>
+                              <ListItemText
+                                primary={n}
+                                primaryTypographyProps={{
+                                  style: { whiteSpace: "pre-wrap" },
+                                }}
+                              />
+                            </ListItem>
+                          ))}
+                        </List>
+                      </Box>
+                    )}
 
                   {reviewText?.codingStyle && (
                     <Box sx={{ mb: 2 }}>
                       <Typography variant="h6" fontWeight={700} gutterBottom>
                         Coding Style
                       </Typography>
-                      <Typography component="pre" sx={{ whiteSpace: "pre-wrap", m: 0 }}>
+                      <Typography
+                        component="pre"
+                        sx={{ whiteSpace: "pre-wrap", m: 0 }}
+                      >
                         {reviewText.codingStyle}
                       </Typography>
                     </Box>
@@ -281,32 +323,56 @@ const DsaReview = () => {
                       <Typography variant="h6" fontWeight={700} gutterBottom>
                         Motivation
                       </Typography>
-                      <Typography color="text.secondary" sx={{ whiteSpace: "pre-wrap" }}>
+                      <Typography
+                        color="text.secondary"
+                        sx={{ whiteSpace: "pre-wrap" }}
+                      >
                         {reviewText.motivation}
                       </Typography>
                     </Box>
                   )}
                 </Box>
-                <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} fullWidth maxWidth="sm">
-                  <DialogTitle sx={{ m: 0, p: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Dialog
+                  open={dialogOpen}
+                  onClose={() => setDialogOpen(false)}
+                  fullWidth
+                  maxWidth="sm"
+                >
+                  <DialogTitle
+                    sx={{
+                      m: 0,
+                      p: 2,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
                     {dialogTitle}
                     <Box>
                       <IconButton
                         aria-label="copy"
                         size="small"
                         onClick={() => {
-                          navigator.clipboard?.writeText(dialogContentText || "")
+                          navigator.clipboard?.writeText(
+                            dialogContentText || "",
+                          );
                         }}
                       >
                         <ContentCopyIcon fontSize="small" />
                       </IconButton>
-                      <IconButton aria-label="close" size="small" onClick={() => setDialogOpen(false)}>
+                      <IconButton
+                        aria-label="close"
+                        size="small"
+                        onClick={() => setDialogOpen(false)}
+                      >
                         <CloseIcon fontSize="small" />
                       </IconButton>
                     </Box>
                   </DialogTitle>
                   <DialogContent dividers>
-                    <Typography sx={{ whiteSpace: 'pre-wrap' }}>{dialogContentText}</Typography>
+                    <Typography sx={{ whiteSpace: "pre-wrap" }}>
+                      {dialogContentText}
+                    </Typography>
                   </DialogContent>
                 </Dialog>
               </Paper>
