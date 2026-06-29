@@ -27,7 +27,7 @@
 - Practice interviews for companies that actively recruit at VESIT (Saint Gobain, Accenture, Clariant, Nomura, Erutech, and more).
 - Questions are company-specific and grounded in real data — seniors' interview experience PDFs are parsed by Gemini AI and seeded into the database by the admin, ensuring every mock interview reflects questions previously asked by that company.
 - Select your interview type — **Technical**, **HR**, or **Mixed** — and answer questions via voice; **AssemblyAI** transcribes responses in real time.
-- Tab-switch or window-blur during a session is detected and automatically ends the interview, simulating real proctored conditions.
+- Timed interview sessions with tab-switch detection to simulate real proctored interview conditions.
 - **Google Gemini** evaluates your interview and provides an overall score, communication score, technical score, confidence score, strengths, weaknesses, and personalized improvement suggestions.
 
 ### 💻 DSA Practice
@@ -40,8 +40,8 @@
 - Three categories: Quantitative Aptitude, Logical Reasoning, and Computer Aptitude
 - Timed mock tests with tab-switch detection to simulate real exam conditions
 - Full mock test mode covering all three categories in one sitting
-- Instant scoring and detailed results on submission
-
+- Instant aptitude score on submission.
+  
 ### 📄 Resume Analyzer
 - Upload your resume (PDF, DOC, DOCX) and get an **ATS Compatibility Score out of 100**
 - High-impact and medium-impact suggestions with before/after rewrites powered by Gemini AI
