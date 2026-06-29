@@ -403,7 +403,7 @@ Want to improve GetPlaced? Contributions are welcome!
 
 ## 📄 License
 
-This project is for educational use at VESIT. All rights reserved.
+This project is licensed under the MIT License.
 
 ---
 
