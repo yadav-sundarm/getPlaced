@@ -12,7 +12,7 @@ import ScreenShareIcon from "@mui/icons-material/ScreenShare";
 import StopScreenShareIcon from "@mui/icons-material/StopScreenShare";
 import CallEndIcon from "@mui/icons-material/CallEnd";
 
-const server_url = "http://localhost:8000";
+const baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:8000"
 
 var connections = {};
 
@@ -298,7 +298,7 @@ export default function VideoMeet() {
 
   //connect to socket server
   let connectToSocketServer = () => {
-    socketRef.current = io.connect(server_url, { secure: false });
+    socketRef.current = io.connect(baseURL, { secure: false });
     socketRef.current.on("signal", gotMessageFromServer);
 
     socketRef.current.on("connect", () => {

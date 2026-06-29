@@ -18,7 +18,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:8000"
 
 const AdminLogin = () => {
   // Force body/html to be scrollable — overrides any leftover styles from student Layout
@@ -55,7 +55,7 @@ const AdminLogin = () => {
 
     setLoading(true);
     try {
-      const { data } = await axios.post(`${API_BASE}/api/users/login`, form);
+      const { data } = await axios.post(`${baseURL}/api/users/login`, form);
       const { token, user } = data.data;
 
       if (user.role !== "admin") {

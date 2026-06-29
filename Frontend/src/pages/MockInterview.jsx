@@ -54,6 +54,9 @@ const MockInterview = () => {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   const currentQuestion = questions[currentIndex];
+
+  const baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:8000"
+
   useEffect(() => {
     if (!questions.length) {
       navigate("/mock-interviews");
@@ -344,7 +347,7 @@ const MockInterview = () => {
       formData.append("interviewDuration", totalInterviewTime);
 
       const res = await axios.post(
-        "http://localhost:8000/api/companies/evaluate",
+        `${baseURL}/api/companies/evaluate`,
         formData,
       );
 

@@ -20,10 +20,12 @@ const Company = () => {
 
   const navigate = useNavigate();
 
+  const baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:8000"
+
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/companies");
+        const res = await axios.get(`${baseURL}/api/companies`);
         setCompanies(res.data);
       } catch (error) {
         console.error("Failed to fetch companies", error);

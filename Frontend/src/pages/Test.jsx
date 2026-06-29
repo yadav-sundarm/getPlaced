@@ -34,6 +34,8 @@ export default function Test() {
   const [showLoader, setShowLoader] = useState(false);
   const [showResult, setShowResult] = useState(false);
 
+  const baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:8000"
+
   // 🔥 SESSION INIT
   useEffect(() => {
     const testKey = `${category}-${testName}`;
@@ -110,7 +112,7 @@ export default function Test() {
       try {
         setLoading(true);
         const res = await axios.get(
-          `http://localhost:8000/api/aptitude-questions/get-${category}-questions`,
+          `${baseURL}/api/aptitude-questions/get-${category}-questions`,
         );
 
         const allQuestions = Object.values(res.data.data.allQuestions).map((q) => ({
@@ -153,7 +155,7 @@ export default function Test() {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
 
       const res = await axios.post(
-        "http://localhost:8000/api/aptitude-questions/submit-test",
+        `${baseURL}/api/aptitude-questions/submit-test`,
         {
           userId: user.id,
           answers,

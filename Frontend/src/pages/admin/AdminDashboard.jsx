@@ -23,7 +23,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:8000"
 
 const StatCard = ({ icon: Icon, label, value, color, bg }) => (
   <Paper
@@ -98,7 +98,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const { data } = await axios.get(`${API_BASE}/api/admin/stats`, {
+        const { data } = await axios.get(`${baseURL}/api/admin/stats`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setStats(data.data);

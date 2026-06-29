@@ -11,6 +11,8 @@ export default function TestLists() {
   const [questions, setQuestions] = useState([]);
   const [tests, setTests] = useState({});
 
+  const baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:8000"
+
   // Split questions into tests
   const splitInTests = () => {
     const QUESTIONS_PER_TEST = 20;
@@ -42,7 +44,7 @@ export default function TestLists() {
     const fetchQuestions = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8000/api/aptitude-questions/get-${category}-questions`,
+          `${baseURL}/api/aptitude-questions/get-${category}-questions`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

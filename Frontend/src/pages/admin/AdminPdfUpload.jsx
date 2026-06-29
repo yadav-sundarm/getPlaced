@@ -23,7 +23,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:8000"
 
 const AdminPdfUpload = () => {
   // Force body/html to be scrollable — overrides any leftover styles from student Layout
@@ -81,7 +81,7 @@ const AdminPdfUpload = () => {
     formData.append("pdf", file);
 
     try {
-      const { data } = await axios.post(`${API_BASE}/api/admin/upload-pdf`, formData, {
+      const { data } = await axios.post(`${baseURL}/api/admin/upload-pdf`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

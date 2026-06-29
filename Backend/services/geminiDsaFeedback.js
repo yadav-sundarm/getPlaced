@@ -61,7 +61,7 @@ Rules:
     `;
 
   try {
-    const models = ["gemini-2.5-flash", "gemini-2.0-flash"];
+    const models = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-3.1-flash-lite"];
 
     let actualReview;
 

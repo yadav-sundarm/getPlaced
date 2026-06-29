@@ -42,6 +42,8 @@ const DsaReview = () => {
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogContentText, setDialogContentText] = useState("");
 
+  const baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:8000"
+
   const loadingMessages = [
     "Preparing your AI review",
     "Please wait",
@@ -53,7 +55,7 @@ const DsaReview = () => {
       setIsLoading(true);
       setError("");
 
-      const response = await fetch("http://localhost:8000/api/dsa/get-review", {
+      const response = await fetch(`${baseURL}/api/dsa/get-review`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

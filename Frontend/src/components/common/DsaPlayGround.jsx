@@ -16,10 +16,11 @@ const DsaPlayground = () => {
   const [redirecting, setRedirecting] = useState(false);
   const redirectTimerRef = useRef(null);
   const navigate = useNavigate();
+  const baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:8000"
 
   const fetchQuestions = async () => {
     const response = await axios.get(
-      `http://localhost:8000/api/dsa/get-single-dsa-question/?questionId=${questionId}`,
+      `${baseURL}/api/dsa/get-single-dsa-question/?questionId=${questionId}`,
     );
     const question = await response?.data?.data?.dsaQuestion;
     setQuestion(question);
@@ -41,7 +42,7 @@ const DsaPlayground = () => {
     try {
       setLoading(true);
       const user = JSON.parse(localStorage.getItem("user") || "{}");
-      const response = await axios.post("http://localhost:8000/api/dsa/run-code", {
+      const response = await axios.post(`${baseURL}/api/dsa/run-code`, {
         language,
         code,
         stdin: "",

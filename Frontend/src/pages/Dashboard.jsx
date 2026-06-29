@@ -30,6 +30,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const firstName = user?.firstName || "User";
+  const baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:8000"
 
   const [scores, setScores] = useState({
     aptitudeScore: null,
@@ -42,7 +43,7 @@ const Dashboard = () => {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.get(
-          "http://localhost:8000/api/users/dashboard-stats",
+          `${baseURL}/api/users/dashboard-stats`,
           {
             headers: { Authorization: `Bearer ${token}` },
           },

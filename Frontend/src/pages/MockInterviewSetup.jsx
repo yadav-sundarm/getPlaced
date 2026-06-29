@@ -43,12 +43,15 @@ const MockInterviewSetup = () => {
   const [interviewType, setInterviewType] = useState("Mixed");
   const [loading, setLoading] = useState(false);
 
+  const baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:8000"
+
+
   const handleStartInterview = async () => {
     try {
       setLoading(true);
 
       const res = await axios.post(
-        "http://localhost:8000/api/companies/start",
+        `${baseURL}/api/companies/start`,
         {
           companyName,
           interviewType,

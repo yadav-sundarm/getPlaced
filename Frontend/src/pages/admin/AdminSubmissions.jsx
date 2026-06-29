@@ -32,7 +32,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:8000"
 
 const statusConfig = {
   pending: { label: "Pending", color: "#d97706", bg: "#fef3c7", icon: HourglassEmpty },
@@ -200,7 +200,7 @@ const AdminSubmissions = () => {
       setError("");
       try {
         const { data } = await axios.get(
-          `${API_BASE}/api/admin/submissions?status=${statusFilter}&page=${page}&limit=10`,
+          `${baseURL}/api/admin/submissions?status=${statusFilter}&page=${page}&limit=10`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setSubmissions(data.data.submissions);
@@ -231,7 +231,7 @@ const AdminSubmissions = () => {
     setActing(true);
     try {
       await axios.patch(
-        `${API_BASE}/api/admin/submissions/${dialog.sub._id}/${dialog.action}`,
+        `${baseURL}/api/admin/submissions/${dialog.sub._id}/${dialog.action}`,
         { reviewNote },
         { headers: { Authorization: `Bearer ${token}` } }
       );

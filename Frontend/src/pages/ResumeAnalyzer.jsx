@@ -31,6 +31,7 @@ const ResumeAnalyzer = () => {
   const [atsScore, setAtsScore] = useState(0);
   const [verdict, setVerdict] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:8000"
 
   const handleUpload = async (e) => {
     const file = e.target.files[0];
@@ -43,7 +44,7 @@ const ResumeAnalyzer = () => {
     formData.append("file", file);
 
     try {
-      const res = await fetch("http://localhost:8000/api/resume/analyze", {
+      const res = await fetch(`${baseURL}/api/resume/analyze`, {
         method: "POST",
         body: formData,
       });

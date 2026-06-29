@@ -27,7 +27,7 @@ import {
 } from "@mui/icons-material";
 import axios from "axios";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:8000"
 
 const ROUND_TYPES = ["Technical", "HR", "Aptitude", "Coding", "GD", "Managerial"];
 const DIFFICULTY_OPTIONS = ["Easy", "Medium", "Hard"];
@@ -170,7 +170,7 @@ const ExperienceShare = () => {
         })),
       };
 
-      await axios.post(`${API_BASE}/api/experience/submit`, payload, {
+      await axios.post(`${baseURL}/api/experience/submit`, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

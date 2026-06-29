@@ -19,9 +19,11 @@ const DSAPractice = () => {
   const topicsPerPage = 9;
   const navigate = useNavigate();
 
+  const baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:8000"
+
   // ✅ Correct fetch function
   const fetchTopics = async () => {
-    const res = await axios.get("http://localhost:8000/api/dsa/get-dsa-topics");
+    const res = await axios.get(`${baseURL}/api/dsa/get-dsa-topics`);
     return res.data.data.allUniqueTopics;
   };
 
