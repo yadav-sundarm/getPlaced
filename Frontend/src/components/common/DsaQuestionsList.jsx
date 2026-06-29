@@ -19,7 +19,7 @@ const DsaQuestionsList = () => {
         const user = JSON.parse(localStorage.getItem("user") || "{}");
         if (!user.id) return;
         const res = await axios.get(
-          `http://localhost:8000/dsa/get-solved-questions?userId=${user.id}`
+          `http://localhost:8000/api/dsa/get-solved-questions?userId=${user.id}`
         );
         setSolvedIds(res.data.data.solvedIds || []);
       } catch (err) {
@@ -31,7 +31,7 @@ const DsaQuestionsList = () => {
 
   const fetchQuestions = async () => {
     const res = await axios.post(
-      `http://localhost:8000/dsa/get-topic-wise-dsa-questions/?topic=${topic.toLowerCase()}`
+      `http://localhost:8000/api/dsa/get-topic-wise-dsa-questions/?topic=${topic.toLowerCase()}`
     );
     return res.data.data.topicWiseQuestions;
   };

@@ -110,7 +110,7 @@ export default function Test() {
       try {
         setLoading(true);
         const res = await axios.get(
-          `http://localhost:8000/aptitude-questions/get-${category}-questions`,
+          `http://localhost:8000/api/aptitude-questions/get-${category}-questions`,
         );
 
         const allQuestions = Object.values(res.data.data.allQuestions).map((q) => ({
@@ -153,7 +153,7 @@ export default function Test() {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
 
       const res = await axios.post(
-        "http://localhost:8000/aptitude-questions/submit-test",
+        "http://localhost:8000/api/aptitude-questions/submit-test",
         {
           userId: user.id,
           answers,

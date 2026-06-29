@@ -33,8 +33,8 @@ app.use(express.urlencoded({ extended: true }));
 
 /* ---------- routes ---------- */
 app.use("/api/resume", resumeRoutes);
-app.use("/aptitude-questions", TestRouter);
-app.use("/dsa", dsaRouter);
+app.use("/api/aptitude-questions", TestRouter);
+app.use("/api/dsa", dsaRouter);
 app.use("/api/companies", companiesRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoutes);

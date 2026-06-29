@@ -21,7 +21,7 @@ const DSAPractice = () => {
 
   // ✅ Correct fetch function
   const fetchTopics = async () => {
-    const res = await axios.get("http://localhost:8000/dsa/get-dsa-topics");
+    const res = await axios.get("http://localhost:8000/api/dsa/get-dsa-topics");
     return res.data.data.allUniqueTopics;
   };
 

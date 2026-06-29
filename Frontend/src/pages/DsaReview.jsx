@@ -53,7 +53,7 @@ const DsaReview = () => {
       setIsLoading(true);
       setError("");
 
-      const response = await fetch("http://localhost:8000/dsa/get-review", {
+      const response = await fetch("http://localhost:8000/api/dsa/get-review", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

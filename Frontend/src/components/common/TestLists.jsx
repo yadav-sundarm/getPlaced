@@ -42,7 +42,7 @@ export default function TestLists() {
     const fetchQuestions = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8000/aptitude-questions/get-${category}-questions`,
+          `http://localhost:8000/api/aptitude-questions/get-${category}-questions`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
