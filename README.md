@@ -15,7 +15,7 @@
 
 > An all-in-one AI-powered placement preparation platform built for students at VESIT. GetPlaced helps you practice DSA, sharpen aptitude, ace mock interviews with real-time AI feedback, analyze your resume, and collaborate with peers through group discussions — all in one place.
 
-🔗 **Live Demo:** [your-live-link-here](https://your-live-link-here.com)
+🔗 **Live Demo:** [GetPlaced](https://get-placed-one.vercel.app/)
 
 ---
 
