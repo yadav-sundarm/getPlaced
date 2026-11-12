@@ -84,9 +84,6 @@ const seedAptitudeQuestionsInDatabase = async() =>{
     try {
         await questionsModel.insertMany(allQuestions)
         console.log("Data extracted and stored in database successfullyy")
-        // return res.status(200).json(
-        //     new CustomApiResponse("Sucessfully stored questions !!", 200, {allQuestions})
-        // )
     } catch (error) {
         throw new customApiError("Error while uploading the data !!", 500,error)
     }
